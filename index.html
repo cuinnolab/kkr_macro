@@ -908,6 +908,12 @@ html.fs-plus4 .kpi-label, html.fs-plus4 .kpi-sub { font-size: calc(13px + 4px); 
   .footer { padding: 20px 16px; }
   .footer p { font-size: 10px; }
 
+  .fs-toggle-wrap {
+    position: static !important;
+    align-items: flex-start;
+    margin-top: 12px;
+  }
+
   /* Named grids → single column on mobile */
   .fan-grid        { grid-template-columns: 1fr; }
   .kpi4-grid       { grid-template-columns: 1fr 1fr; gap:12px; }
@@ -1009,7 +1015,7 @@ html.fs-plus4 .kpi-label, html.fs-plus4 .kpi-sub { font-size: calc(13px + 4px); 
       </div>
     </div>
   </div>
-  <div style="position:absolute;bottom:18px;right:28px;display:flex;flex-direction:column;align-items:flex-end;gap:0.5px;">
+  <div class="fs-toggle-wrap" style="position:absolute;bottom:18px;right:28px;display:flex;flex-direction:column;align-items:flex-end;gap:0.5px;">
     <div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(185,207,237,0.7);line-height:1;">Font Size</div>
     <div class="fs-toggle" role="group" aria-label="Font size">
       <button class="fs-btn active" onclick="setFontSize(0, this)">Base</button>
