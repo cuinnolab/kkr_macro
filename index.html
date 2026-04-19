@@ -765,85 +765,15 @@ body {
 .disclaimer-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; align-items:stretch; }
 
 /* ══════════════
-   FONT SIZE TOGGLE
-══════════════ */
-:root { --fs-delta: 0px; }
-.fs-toggle {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 3px;
-  gap: 2px;
-  margin-top: 14px;
-}
-.fs-btn {
-  padding: 5px 13px;
-  border-radius: 6px;
-  border: none;
-  background: transparent;
-  color: rgba(185,207,237,0.7);
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
-}
-.fs-btn.active {
-  background: var(--kkr-red);
-  color: #fff;
-}
-.fs-btn:hover:not(.active) { background: rgba(255,255,255,0.12); color: #fff; }
-
-
-/* ══════════════
-   FONT SIZE TOGGLE CLASSES
-══════════════ */
-html.fs-plus2 { font-size: 18px; }
-html.fs-plus4 { font-size: 20px; }
-
-html.fs-plus2 .sec-sub,
-html.fs-plus4 .sec-sub { font-size: calc(15px + var(--fs-delta)); }
-
-html.fs-plus2 .chart-card-title { font-size: calc(15px + 2px); }
-html.fs-plus4 .chart-card-title { font-size: calc(15px + 4px); }
-
-html.fs-plus2 .exec-body,
-html.fs-plus2 .pillar-body { font-size: calc(16px + 2px); }
-html.fs-plus4 .exec-body,
-html.fs-plus4 .pillar-body { font-size: calc(16px + 4px); }
-
-html.fs-plus2 .exec-title,
-html.fs-plus2 .pillar-title { font-size: calc(17px + 2px); }
-html.fs-plus4 .exec-title,
-html.fs-plus4 .pillar-title { font-size: calc(17px + 4px); }
-
-html.fs-plus2 .pq-text { font-size: calc(19px + 2px); }
-html.fs-plus4 .pq-text { font-size: calc(19px + 4px); }
-
-html.fs-plus2 .sec-title { font-size: calc(26px + 2px); }
-html.fs-plus4 .sec-title { font-size: calc(26px + 4px); }
-
-html.fs-plus2 p, html.fs-plus2 td, html.fs-plus2 th,
-html.fs-plus2 .chart-card-label, html.fs-plus2 .chart-source,
-html.fs-plus2 .bar-label, html.fs-plus2 .bar-val,
-html.fs-plus2 .kpi-label, html.fs-plus2 .kpi-sub { font-size: calc(13px + 2px); }
-
-html.fs-plus4 p, html.fs-plus4 td, html.fs-plus4 th,
-html.fs-plus4 .chart-card-label, html.fs-plus4 .chart-source,
-html.fs-plus4 .bar-label, html.fs-plus4 .bar-val,
-html.fs-plus4 .kpi-label, html.fs-plus4 .kpi-sub { font-size: calc(13px + 4px); }
-
-/* ══════════════
    RESPONSIVE — TABLET & MOBILE
 ══════════════ */
+
+/* ── 1024px: large tablet landscape ── */
 @media (max-width: 1024px) {
   .header-inner { flex-direction: column; padding: 28px 32px 24px; gap: 20px; }
   .header-right { text-align: left; }
   .authors { align-items: flex-start; }
-  .header-title { font-size: clamp(26px, 4vw, 40px); }
+  .header-title { font-size: clamp(28px, 4vw, 44px); }
   .section-inner { padding: 28px 32px; }
   .nav-inner { padding: 0 24px; }
   .kpi-strip { grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -851,112 +781,172 @@ html.fs-plus4 .kpi-label, html.fs-plus4 .kpi-sub { font-size: calc(13px + 4px); 
   .chart-grid-3 { grid-template-columns: 1fr 1fr; }
 }
 
+/* ── 900px: iPad / tablet portrait ── */
+@media (max-width: 900px) {
+  .header-title { font-size: clamp(26px, 4.5vw, 38px); }
+  .header-sub { font-size: 17px; }
+  .kkr-wordmark { font-size: 22px; }
+  .eyebrow { font-size: 13px; }
+
+  .nav-tab { padding: 14px 12px; font-size: 12px; letter-spacing: 0.05em; }
+
+  .section-inner { padding: 24px 24px; }
+  .sec-title { font-size: 24px; }
+  .sec-sub { font-size: 16px; }
+  .sec-number { font-size: 36px; }
+
+  .kpi-strip { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .kpi-val { font-size: 22px; }
+  .kpi-label { font-size: 13px; }
+  .kpi-change { font-size: 13px; }
+  .kpi-sub { font-size: 13px; }
+
+  .exec-title { font-size: 17px; }
+  .exec-body { font-size: 16px; }
+  .exec-num { font-size: 44px; }
+
+  .chart-card-title { font-size: 16px; }
+  .chart-card-label { font-size: 13px; }
+  .chart-source { font-size: 13px; }
+
+  .pillar-title { font-size: 17px; }
+  .pillar-body { font-size: 16px; }
+
+  .pq-text { font-size: 18px; }
+  .pq-attr { font-size: 14px; }
+
+  .comp-table { font-size: 14px; }
+  .comp-table th { font-size: 12px; padding: 8px 10px; }
+  .comp-table td { padding: 9px 10px; }
+  .heatcell { font-size: 13px; }
+  .fc-table { font-size: 13px; }
+  .fc-table th { font-size: 12px; padding: 8px 10px; }
+  .fc-table td { font-size: 13px; padding: 8px 10px; }
+
+  .bar-label { width: 140px; font-size: 14px; }
+  .bar-val { font-size: 14px; width: 50px; }
+
+  .fan-grid { grid-template-columns: 1fr 1fr; }
+  .kpi4-grid { grid-template-columns: repeat(2, 1fr); }
+  .bar-split-grid { grid-template-columns: 1fr; gap: 20px; }
+  .disclaimer-grid { grid-template-columns: 1fr; }
+
+  .footer p { font-size: 13px; }
+}
+
+/* ── 768px: large phones / small tablets ── */
 @media (max-width: 768px) {
   .header-inner { padding: 22px 20px 20px; }
-  .header-title { font-size: clamp(24px, 5vw, 34px); }
-  .header-sub { font-size: 13px; }
-  .kkr-wordmark { font-size: 17px; }
+  .header-title { font-size: clamp(24px, 5.5vw, 34px); }
+  .header-sub { font-size: 15px; }
+  .kkr-wordmark { font-size: 20px; }
 
   .nav-inner { padding: 0 12px; }
-  .nav-tab { padding: 14px 10px; font-size: 10px; letter-spacing: 0.04em; }
+  .nav-tab { padding: 14px 10px; font-size: 11px; letter-spacing: 0.04em; }
 
-  .section-inner { padding: 22px 16px; }
+  .section-inner { padding: 20px 16px; }
 
   .kpi-strip { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
   .kpi-card { padding: 14px 14px; }
-  .kpi-val { font-size: 18px; }
-  .kpi-label { font-size: 10px; }
-  .kpi-change { font-size: 11px; }
-  .kpi-sub { font-size: 10px; }
+  .kpi-val { font-size: 20px; }
+  .kpi-label { font-size: 12px; }
+  .kpi-change { font-size: 12px; }
+  .kpi-sub { font-size: 12px; }
 
   .exec-grid { grid-template-columns: 1fr; gap: 14px; }
   .exec-card.wide { grid-column: 1; }
   .exec-num { font-size: 40px; }
-  .exec-title { font-size: 15px; }
-  .exec-body { font-size: 14px; }
+  .exec-title { font-size: 16px; }
+  .exec-body { font-size: 15px; }
   .thesis-card { flex-direction: column; gap: 16px; padding: 22px 20px !important; }
 
   .chart-grid-2,
   .chart-grid-3 { grid-template-columns: 1fr; gap: 14px; }
   .chart-card { padding: 18px 16px; }
-  .chart-card-title { font-size: 14px; }
+  .chart-card-title { font-size: 15px; }
+  .chart-card-label { font-size: 12px; }
+  .chart-source { font-size: 12px; }
 
   .pillars-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .pillar-title { font-size: 15px; }
-  .pillar-body { font-size: 14px; }
+  .pillar-title { font-size: 16px; }
+  .pillar-body { font-size: 15px; }
 
   .pullquote { padding: 20px 22px; }
-  .pq-text { font-size: 16px; }
-  .pq-attr { font-size: 11px; }
+  .pq-text { font-size: 17px; }
+  .pq-attr { font-size: 13px; }
 
-  .comp-table { font-size: 12px; }
-  .comp-table th { font-size: 9px; padding: 7px 8px; }
+  .comp-table { font-size: 13px; }
+  .comp-table th { font-size: 11px; padding: 7px 8px; }
   .comp-table td { padding: 8px 8px; }
-  .heatcell { font-size: 11px; padding: 2px 6px; }
-  .fc-table { font-size: 11px; }
-  .fc-table th { font-size: 9px; padding: 7px 8px; }
-  .fc-table td { font-size: 11px; padding: 7px 8px; }
+  .heatcell { font-size: 12px; padding: 2px 6px; }
+  .fc-table { font-size: 13px; }
+  .fc-table th { font-size: 11px; padding: 7px 8px; }
+  .fc-table td { font-size: 13px; padding: 8px 8px; }
 
-  .bar-label { width: 130px; font-size: 12px; }
-  .bar-val { font-size: 12px; width: 46px; }
+  .bar-label { width: 130px; font-size: 13px; }
+  .bar-val { font-size: 13px; width: 46px; }
 
   .sec-title { font-size: 22px; }
-  .sec-sub { font-size: 13px; }
+  .sec-sub { font-size: 16px; }
   .sec-number { font-size: 32px; }
 
   .stat-inline { grid-template-columns: 1fr 1fr; }
   .footer { padding: 20px 16px; }
-  .footer p { font-size: 10px; }
+  .footer p { font-size: 13px; }
 
-  .fs-toggle-wrap {
-    position: static !important;
-    align-items: flex-start;
-    margin-top: 12px;
-  }
-
-  /* Named grids → single column on mobile */
   .fan-grid        { grid-template-columns: 1fr; }
-  .kpi4-grid       { grid-template-columns: 1fr 1fr; gap:12px; }
-  .bar-split-grid  { grid-template-columns: 1fr; gap:20px; }
+  .kpi4-grid       { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .bar-split-grid  { grid-template-columns: 1fr; gap: 20px; }
   .credit-grid     { grid-template-columns: 1fr; }
   .regime-grid     { grid-template-columns: 1fr 1fr; }
   .disclaimer-grid { grid-template-columns: 1fr; }
-
-  /* Forecast fan small multiples: taller panels on mobile */
-  .fan-grid > div > div[style*="height:200px"] { height:160px !important; }
 }
 
+/* ── 480px: phones ── */
 @media (max-width: 480px) {
   .header-inner { padding: 18px 16px 16px; }
-  .header-title { font-size: 22px; }
-  .eyebrow { font-size: 9px; }
+  .header-title { font-size: clamp(22px, 6vw, 28px); }
+  .eyebrow { font-size: 12px; }
 
-  .nav-tab { padding: 13px 8px; font-size: 9.5px; }
+  .nav-tab { padding: 13px 8px; font-size: 11px; }
 
   .kpi-strip { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .kpi-val { font-size: 16px; }
+  .kpi-val { font-size: 18px; }
+  .kpi-label { font-size: 12px; }
+  .kpi-change { font-size: 12px; }
+  .kpi-sub { font-size: 12px; }
 
   .exec-num { font-size: 34px; }
-  .exec-title { font-size: 14px; }
-  .exec-body { font-size: 13px; }
+  .exec-title { font-size: 15px; }
+  .exec-body { font-size: 14px; }
 
   .pillars-grid { grid-template-columns: 1fr; }
   .stat-inline { grid-template-columns: 1fr; }
 
   .scenario-row { flex-direction: column; align-items: flex-start; }
-  .s-pill { font-size: 10px; padding: 4px 10px; }
+  .s-pill { font-size: 12px; padding: 5px 12px; }
 
-  .chart-card-title { font-size: 13px; }
-  .pq-text { font-size: 15px; }
+  .chart-card-title { font-size: 15px; }
+  .chart-card-label { font-size: 12px; }
+  .pq-text { font-size: 16px; }
 
-  .bar-label { width: 110px; font-size: 11px; }
-  .bar-val { font-size: 11px; width: 40px; }
+  .bar-label { width: 110px; font-size: 13px; }
+  .bar-val { font-size: 13px; width: 42px; }
 
-  /* Tables: allow horizontal scroll on mobile */
+  .sec-sub { font-size: 16px; }
+  .sec-title { font-size: 20px; }
+
+  .comp-table { font-size: 13px; }
+  .comp-table th { font-size: 11px; }
+  .fc-table { font-size: 13px; }
+  .fc-table th { font-size: 11px; }
+  .fc-table td { font-size: 13px; }
+
+  .footer p { font-size: 13px; }
+
   .comp-table-wrap,
   .fc-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-  /* Fully collapse remaining 2-col grids at 480px */
   .kpi4-grid   { grid-template-columns: 1fr 1fr; }
   .regime-grid { grid-template-columns: 1fr; }
 }
@@ -1015,14 +1005,7 @@ html.fs-plus4 .kpi-label, html.fs-plus4 .kpi-sub { font-size: calc(13px + 4px); 
       </div>
     </div>
   </div>
-  <div class="fs-toggle-wrap" style="position:absolute;bottom:18px;right:28px;display:flex;flex-direction:column;align-items:flex-end;gap:0.5px;">
-    <div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(185,207,237,0.7);line-height:1;">Font Size</div>
-    <div class="fs-toggle" role="group" aria-label="Font size">
-      <button class="fs-btn active" onclick="setFontSize(0, this)">Base</button>
-      <button class="fs-btn"        onclick="setFontSize(2, this)">+2</button>
-      <button class="fs-btn"        onclick="setFontSize(4, this)">+4</button>
-    </div>
-  </div>
+
 </header>
 
 <!-- ═════════════════════════════
@@ -1860,18 +1843,6 @@ html.fs-plus4 .kpi-label, html.fs-plus4 .kpi-sub { font-size: calc(13px + 4px); 
 </footer>
 
 <script>
-// ══════════════════════════════════
-// FONT SIZE TOGGLE
-// ══════════════════════════════════
-function setFontSize(delta, btn) {
-  const html = document.documentElement;
-  html.classList.remove('fs-plus2', 'fs-plus4');
-  if (delta === 2) html.classList.add('fs-plus2');
-  if (delta === 4) html.classList.add('fs-plus4');
-  document.querySelectorAll('.fs-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
 // ══════════════════════════════════
 // SECTION NAVIGATION
 // ══════════════════════════════════
