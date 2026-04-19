@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KKR Flash Macro Update — U.S. Markets | April 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+/* ══════════════════════════════════════════════
+   KKR FLASH MACRO DASHBOARD — April 2026
+   Design system: RAF v1.0 inspired
+══════════════════════════════════════════════ */
+:root {
+  --kkr-navy:       #01295C;
+  --kkr-navy-mid:   #0A3F7A;
+  --kkr-blue:       #075AAA;
+  --kkr-blue-mid:   #3A7EBB;
+  --kkr-blue-light: #B9CFED;
+  --kkr-blue-tint:  #E8F0F9;
+  --kkr-red:        #EB2226;
+  --kkr-red-dark:   #B01418;
+  --kkr-green:      #1A7A4A;
+  --kkr-cream:      #F4F6FA;
+  --kkr-border:     rgba(1,41,92,0.10);
+  --serif:          'Playfair Display', Georgia, serif;
+  --sans:           'Nunito', system-ui, sans-serif;
+  --mono:           'DM Mono', 'Fira Code', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--kkr-navy);
+  background: var(--kkr-cream);
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--kkr-blue-tint); }
+::-webkit-scrollbar-thumb { background: var(--kkr-blue-mid); border-radius: 3px; }
+
+/* ══════════════
+   HEADER
+══════════════ */
+.header {
+  background: var(--kkr-navy);
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--kkr-red);
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -80px;
+  width: 520px; height: 520px;
+  border-radius: 50%;
+  background: rgba(7,90,170,0.22);
+  pointer-events: none;
+}
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 36px 48px 30px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+}
+.header-left { flex: 1; }
+.kkr-wordmark {
+  font-family: var(--sans);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #fff;
+  opacity: 0.92;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.kkr-wordmark::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(185,207,237,0.2);
+  max-width: 200px;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6DA3CE;
+  margin-bottom: 14px;
+}
+.eyebrow::before {
+  content: '';
+  width: 20px; height: 2px;
+  background: var(--kkr-red);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+.header-title {
+  font-family: var(--serif);
+  font-size: clamp(30px, 3.8vw, 52px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.header-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: rgba(185,207,237,0.88);
+  line-height: 1.65;
+  max-width: 540px;
+  margin-bottom: 18px;
+}
+
+.header-right { text-align: right; flex-shrink: 0; padding-top: 4px; }
+.header-date {
+  font-size: 13px;
+  font-family: var(--mono);
+  color: #6DA3CE;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.authors { display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px 0; align-items: center; justify-content: flex-end; }
+.author { display: inline; }
+.author-name { font-size: 15px; font-weight: 600; color: rgba(185,207,237,0.9); display: inline; }
+.author-sep { font-size: 15px; color: rgba(185,207,237,0.4); margin: 0 8px; display: inline; }
+
+/* ══════════════
+   NAV
+══════════════ */
+.nav-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--kkr-border);
+  position: relative;
+  z-index: 1000;
+  box-shadow: 0 2px 16px rgba(1,41,92,0.08);
+}
+.nav-bar.is-sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.nav-bar-spacer {
+  height: 0;
+}
+
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-inner::-webkit-scrollbar { height: 0; }
+.nav-tab {
+  padding: 15px 18px;
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(1,41,92,0.58);
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-tab:hover:not(.active) { color: var(--kkr-navy); }
+.nav-tab.active { color: var(--kkr-blue); border-bottom-color: var(--kkr-red); }
+
+/* ── Nav scroll carets ── */
+.nav-caret {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.25s ease;
+}
+.nav-caret.hidden { opacity: 0; }
+.nav-caret-left  { left: 0;  background: linear-gradient(to right, rgba(255,255,255,0.95), transparent); }
+.nav-caret-right { right: 0; background: linear-gradient(to left,  rgba(255,255,255,0.95), transparent); }
+.nav-caret svg {
+  color: var(--kkr-red);
+}
+.nav-caret-left  svg { animation: caretLeft  2s ease-in-out infinite; }
+.nav-caret-right svg { animation: caretRight 2s ease-in-out infinite; }
+@keyframes caretLeft {
+  0%,100% { transform: translateX(0);    opacity: 0.5; }
+  50%      { transform: translateX(-3px); opacity: 1; }
+}
+@keyframes caretRight {
+  0%,100% { transform: translateX(0);   opacity: 0.5; }
+  50%      { transform: translateX(3px); opacity: 1; }
+}
+
+.section { display: none; }
+.section.active { display: block; }
+.section-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 48px;
+}
+
+/* ══════════════
+   TYPOGRAPHY
+══════════════ */
+.sec-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+.sec-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--kkr-navy);
+}
+.sec-number {
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--kkr-blue-light);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.sec-sub {
+  font-size: 15px;
+  color: rgba(1,41,92,0.45);
+  margin-bottom: 28px;
+  font-weight: 300;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--kkr-border);
+}
+.divider { height: 1px; background: var(--kkr-border); margin: 28px 0; }
+
+/* ══════════════
+   KPI STRIP
+══════════════ */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 30px;
+}
+.kpi-card {
+  background: #fff;
+  border-radius: 10px;
+  border: 0.5px solid var(--kkr-border);
+  padding: 16px 18px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease, transform 0.45s ease, box-shadow 0.2s;
+}
+.kpi-card:hover { box-shadow: 0 4px 16px rgba(1,41,92,0.08); }
+.kpi-card.visible { opacity: 1; transform: translateY(0); }
+.kpi-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(1,41,92,0.38);
+  margin-bottom: 7px;
+}
+.kpi-val {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--kkr-navy);
+  font-family: var(--mono);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.kpi-val.down { color: var(--kkr-red); }
+.kpi-val.up   { color: var(--kkr-blue); }
+.kpi-change { font-size: 13px; font-weight: 600; }
+.kpi-change.neg { color: var(--kkr-red); }
+.kpi-change.pos { color: var(--kkr-green); }
+.kpi-sub { font-size: 12px; color: rgba(1,41,92,0.32); margin-top: 3px; }
+
+/* ══════════════
+   EXEC CARDS
+══════════════ */
+.exec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.exec-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 0.5px solid var(--kkr-border);
+  padding: 24px 26px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s;
+}
+.exec-card:hover { box-shadow: 0 6px 24px rgba(1,41,92,0.09); }
+.exec-card.visible { opacity: 1; transform: translateY(0); }
+.exec-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+}
+.exec-card.c-red::before   { background: var(--kkr-red); }
+.exec-card.c-blue::before  { background: var(--kkr-blue); }
+.exec-card.c-green::before { background: var(--kkr-green); }
+.exec-card.c-navy::before  { background: var(--kkr-navy); }
+.exec-card.wide { grid-column: 1 / -1; }
+.exec-num {
+  font-family: var(--serif);
+  font-size: 52px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--kkr-blue-mid);
+  margin-bottom: 12px;
+}
+.exec-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--kkr-navy);
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+.exec-body {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(1,41,92,0.70);
+  line-height: 1.68;
+}
+.exec-body strong { color: var(--kkr-navy); font-weight: 600; }
+.exec-tag {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.tag-risk   { background: #FEF0F0; color: #B01418; }
+.tag-watch  { background: var(--kkr-blue-tint); color: var(--kkr-blue); }
+.tag-signal { background: #E8F0F9; color: #075AAA; }
+.tag-action { background: var(--kkr-blue-tint); color: var(--kkr-blue); }
+.tag-macro  { background: var(--kkr-blue-tint); color: var(--kkr-navy); }
+
+/* ══════════════
+   CHART CARDS
+══════════════ */
+.chart-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.chart-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.chart-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 0.5px solid var(--kkr-border);
+  padding: 22px 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.2s;
+}
+.chart-card:hover { box-shadow: 0 4px 18px rgba(1,41,92,0.07); }
+.chart-card.visible { opacity: 1; transform: translateY(0); }
+.chart-card.full { grid-column: 1 / -1; }
+.chart-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(1,41,92,0.38);
+  margin-bottom: 3px;
+}
+.chart-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--kkr-navy);
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+.chart-source {
+  font-size: 11px;
+  color: rgba(1,41,92,0.32);
+  margin-top: 12px;
+  font-family: var(--mono);
+  line-height: 1.5;
+}
+
+/* ══════════════
+   LEGEND
+══════════════ */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: rgba(1,41,92,0.55);
+}
+.leg-dot   { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.leg-line  { width: 20px; height: 2.5px; border-radius: 1px; flex-shrink: 0; }
+.leg-dash  { width: 20px; height: 2px; flex-shrink: 0; background: repeating-linear-gradient(90deg, currentColor 0 6px, transparent 6px 10px); }
+
+/* ══════════════
+   COMPARISON TABLE
+══════════════ */
+.comp-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.comp-table th {
+  padding: 9px 13px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(1,41,92,0.4);
+  border-bottom: 1.5px solid var(--kkr-blue-light);
+  white-space: nowrap;
+}
+.comp-table td {
+  padding: 11px 13px;
+  border-bottom: 0.5px solid var(--kkr-border);
+  color: var(--kkr-navy);
+  vertical-align: middle;
+}
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table .metric { font-weight: 500; font-size: 14px; }
+.heatcell {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+.h-low     { background: #D6F4E7; color: #1A7A4A; }
+.h-mid     { background: var(--kkr-blue-tint); color: var(--kkr-blue); }
+.h-high    { background: #FEF0F0; color: #B01418; }
+.h-neutral { background: var(--kkr-blue-tint); color: var(--kkr-blue); }
+
+/* ══════════════
+   FORECAST TABLE
+══════════════ */
+.fc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.fc-table th {
+  padding: 9px 11px;
+  background: var(--kkr-navy);
+  color: rgba(185,207,237,0.75);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+}
+.fc-table th:first-child { text-align: left; min-width: 60px; }
+.fc-table td {
+  padding: 9px 11px;
+  border-bottom: 0.5px solid var(--kkr-border);
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--kkr-navy);
+  white-space: nowrap;
+}
+.fc-table td:first-child { text-align: left; font-family: var(--sans); font-weight: 700; font-size: 14px; }
+.fc-table tr.base-row td { background: rgba(7,90,170,0.03); }
+.fc-table .up { color: var(--kkr-red); font-weight: 700; }
+.fc-table .dn { color: var(--kkr-green); font-weight: 700; }
+.fc-table .grp { background: rgba(1,41,92,0.82) !important; }
+.fc-table .grp-div { border-right: 1.5px solid rgba(1,41,92,0.14) !important; }
+
+/* ══════════════
+   BAR ROWS (animated)
+══════════════ */
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 11px;
+}
+.bar-label {
+  font-size: 13px;
+  color: rgba(1,41,92,0.62);
+  width: 170px;
+  flex-shrink: 0;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.bar-track {
+  flex: 1;
+  height: 9px;
+  background: var(--kkr-blue-tint);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  width: 0;
+  transition: width 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bar-val {
+  font-size: 13px;
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--kkr-navy);
+  width: 56px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ══════════════
+   SCENARIO PILLS
+══════════════ */
+.scenario-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.scenario-row span.label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(1,41,92,0.38);
+  margin-right: 4px;
+}
+.s-pill {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: default;
+  border: 1.5px solid transparent;
+}
+.s-pill.base  { background: var(--kkr-blue-tint); color: var(--kkr-blue); border-color: var(--kkr-blue); }
+.s-pill.high  { background: #FEF0F0; color: #B01418; border-color: var(--kkr-red); }
+.s-pill.low   { background: #D6F4E7; color: #1A7A4A; border-color: var(--kkr-green); }
+
+/* ══════════════
+   PULLQUOTE
+══════════════ */
+.pullquote {
+  background: var(--kkr-navy);
+  border-radius: 12px;
+  padding: 26px 32px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.pullquote::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--kkr-red);
+}
+.pullquote::before {
+  content: '"';
+  position: absolute;
+  top: -10px; right: 24px;
+  font-family: var(--serif);
+  font-size: 120px;
+  color: rgba(185,207,237,0.08);
+  line-height: 1;
+  pointer-events: none;
+}
+.pq-text {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #fff;
+  margin-bottom: 10px;
+  max-width: 900px;
+}
+.pq-attr {
+  font-size: 13px;
+  color: #6DA3CE;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ══════════════
+   PILLARS
+══════════════ */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 26px;
+}
+.pillar-card {
+  background: #fff;
+  border-radius: 10px;
+  border: 0.5px solid var(--kkr-border);
+  border-top: 3px solid var(--kkr-red);
+  padding: 20px 18px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  transition: opacity 0.45s ease, transform 0.45s ease, box-shadow 0.2s;
+}
+.pillar-card:hover { box-shadow: 0 4px 16px rgba(1,41,92,0.08); transform: scale(1) translateY(0); }
+.pillar-card.visible { opacity: 1; transform: translateY(0) scale(1); }
+.pillar-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: var(--kkr-blue-tint);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+  font-size: 20px;
+}
+.pillar-title { font-size: 17px; font-weight: 700; color: var(--kkr-navy); margin-bottom: 7px; line-height: 1.3; }
+.pillar-body  { font-size: 16px; color: rgba(1,41,92,0.70); line-height: 1.62; }
+
+/* ══════════════
+   INLINE STAT BOXES
+══════════════ */
+.stat-inline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.stat-box {
+  background: var(--kkr-blue-tint);
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-align: center;
+}
+.stat-box-val { font-size: 28px; font-family: var(--mono); font-weight: 600; color: var(--kkr-navy); line-height: 1; margin-bottom: 5px; }
+.stat-box-val.danger { color: var(--kkr-red); }
+.stat-box-label { font-size: 11px; font-weight: 600; color: rgba(1,41,92,0.5); line-height: 1.4; }
+
+/* ══════════════
+   TAGS + BADGES
+══════════════ */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.badge-up   { background: #FEF0F0; color: #B01418; }
+.badge-dn   { background: #D6F4E7; color: #1A7A4A; }
+.badge-neu  { background: var(--kkr-blue-tint); color: var(--kkr-blue); }
+
+/* ══════════════
+   FOOTER
+══════════════ */
+.footer {
+  background: var(--kkr-navy);
+  position: relative;
+  padding: 24px 48px;
+  text-align: center;
+}
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--kkr-red);
+}
+.footer-inner { max-width: 1280px; margin: 0 auto; }
+.footer p { font-size: 11px; color: rgba(185,207,237,0.45); line-height: 1.7; max-width: 900px; margin: 0 auto; }
+.footer strong { color: rgba(185,207,237,0.7); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes countNum {
+  from { transform: translateY(6px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ══════════════
+   RESPONSIVE — TABLET & MOBILE
+══════════════ */
+@media (max-width: 1024px) {
+  .header-inner { flex-direction: column; padding: 28px 32px 24px; gap: 20px; }
+  .header-right { text-align: left; }
+  .authors { align-items: flex-start; }
+  .header-title { font-size: clamp(26px, 4vw, 40px); }
+  .section-inner { padding: 28px 32px; }
+  .nav-inner { padding: 0 24px; }
+  .kpi-strip { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid-3 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .header-inner { padding: 22px 20px 20px; }
+  .header-title { font-size: clamp(24px, 5vw, 34px); }
+  .header-sub { font-size: 13px; }
+  .kkr-wordmark { font-size: 17px; }
+
+  .nav-inner { padding: 0 12px; }
+  .nav-tab { padding: 14px 10px; font-size: 10px; letter-spacing: 0.04em; }
+
+  .section-inner { padding: 22px 16px; }
+
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+  .kpi-card { padding: 14px 14px; }
+  .kpi-val { font-size: 18px; }
+  .kpi-label { font-size: 10px; }
+  .kpi-change { font-size: 11px; }
+  .kpi-sub { font-size: 10px; }
+
+  .exec-grid { grid-template-columns: 1fr; gap: 14px; }
+  .exec-card.wide { grid-column: 1; }
+  .exec-num { font-size: 40px; }
+  .exec-title { font-size: 15px; }
+  .exec-body { font-size: 14px; }
+  .thesis-card { flex-direction: column; gap: 16px; padding: 22px 20px !important; }
+
+  .chart-grid-2,
+  .chart-grid-3 { grid-template-columns: 1fr; gap: 14px; }
+  .chart-card { padding: 18px 16px; }
+  .chart-card-title { font-size: 14px; }
+
+  .pillars-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .pillar-title { font-size: 15px; }
+  .pillar-body { font-size: 14px; }
+
+  .pullquote { padding: 20px 22px; }
+  .pq-text { font-size: 16px; }
+  .pq-attr { font-size: 11px; }
+
+  .comp-table { font-size: 12px; }
+  .comp-table th { font-size: 9px; padding: 7px 8px; }
+  .comp-table td { padding: 8px 8px; }
+  .heatcell { font-size: 11px; padding: 2px 6px; }
+  .fc-table { font-size: 11px; }
+  .fc-table th { font-size: 9px; padding: 7px 8px; }
+  .fc-table td { font-size: 11px; padding: 7px 8px; }
+
+  .bar-label { width: 130px; font-size: 12px; }
+  .bar-val { font-size: 12px; width: 46px; }
+
+  .sec-title { font-size: 22px; }
+  .sec-sub { font-size: 13px; }
+  .sec-number { font-size: 32px; }
+
+  .stat-inline { grid-template-columns: 1fr 1fr; }
+  .footer { padding: 20px 16px; }
+  .footer p { font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+  .header-inner { padding: 18px 16px 16px; }
+  .header-title { font-size: 22px; }
+  .eyebrow { font-size: 9px; }
+
+  .nav-tab { padding: 13px 8px; font-size: 9.5px; }
+
+  .kpi-strip { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi-val { font-size: 16px; }
+
+  .exec-num { font-size: 34px; }
+  .exec-title { font-size: 14px; }
+  .exec-body { font-size: 13px; }
+
+  .pillars-grid { grid-template-columns: 1fr; }
+  .stat-inline { grid-template-columns: 1fr; }
+
+  .scenario-row { flex-direction: column; align-items: flex-start; }
+  .s-pill { font-size: 10px; padding: 4px 10px; }
+
+  .chart-card-title { font-size: 13px; }
+  .pq-text { font-size: 15px; }
+
+  .bar-label { width: 110px; font-size: 11px; }
+  .bar-val { font-size: 11px; width: 40px; }
+
+  /* Tables: allow horizontal scroll on mobile */
+  .comp-table-wrap,
+  .fc-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═════════════════════════════
+     HEADER
+═════════════════════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="kkr-wordmark">KKR</div>
+      <div class="eyebrow">Flash Macro Update — U.S. Markets — April 2026</div>
+      <h1 class="header-title">Navigating the<br>New Macro Regime</h1>
+      <p class="header-sub">An updated assessment of U.S. markets amid the Iran conflict, energy price shocks, and evolving macro crosscurrents driven by oil, Private Credit normalization, and the AI disruption debate.</p>
+
+    </div>
+    <div class="header-right">
+      <div class="header-date">Data as of March 30, 2026</div>
+      <div class="authors">
+        <a href="https://www.kkr.com/about/our-people/henry-h-mcvey" target="_blank" rel="noopener noreferrer" class="author-name" style="text-decoration:none;border-bottom:1px solid rgba(185,207,237,0.35);transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='rgba(185,207,237,0.8)'" onmouseout="this.style.borderBottomColor='rgba(185,207,237,0.35)'">Henry H. McVey</a>
+        <span class="author-sep">·</span>
+        <a href="https://www.kkr.com/about/our-people/david-mcnellis" target="_blank" rel="noopener noreferrer" class="author-name" style="text-decoration:none;border-bottom:1px solid rgba(185,207,237,0.35);transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='rgba(185,207,237,0.8)'" onmouseout="this.style.borderBottomColor='rgba(185,207,237,0.35)'">Dave McNellis</a>
+        <span class="author-sep">·</span>
+        <a href="https://www.kkr.com/about/our-people/brian-leung" target="_blank" rel="noopener noreferrer" class="author-name" style="text-decoration:none;border-bottom:1px solid rgba(185,207,237,0.35);transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='rgba(185,207,237,0.8)'" onmouseout="this.style.borderBottomColor='rgba(185,207,237,0.35)'">Brian Leung</a>
+        <span class="author-sep">·</span>
+        <a href="https://www.kkr.com/about/our-people/ezra-max" target="_blank" rel="noopener noreferrer" class="author-name" style="text-decoration:none;border-bottom:1px solid rgba(185,207,237,0.35);transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='rgba(185,207,237,0.8)'" onmouseout="this.style.borderBottomColor='rgba(185,207,237,0.35)'">Ezra Max</a>
+        <span class="author-sep">·</span>
+        <span class="author-name">Miguel Montoya</span>
+      </div>
+      <a href="https://www.kkr.com/content/dam/kkr/insights/pdf/2026-april-flash-macro-us-markets.pdf"
+         target="_blank" rel="noopener noreferrer"
+         style="display:inline-flex;align-items:center;gap:7px;margin-top:16px;padding:8px 16px;background:var(--kkr-red);border-radius:6px;text-decoration:none;transition:opacity 0.2s;"
+         onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#fff;">Download PDF</span>
+      </a>
+      <button onclick="document.getElementById('kkr-audio').style.display=document.getElementById('kkr-audio').style.display==='none'?'block':'none'"
+         style="display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:8px 16px;background:var(--kkr-red);border-radius:6px;border:none;cursor:pointer;transition:opacity 0.2s;"
+         onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#fff;">Listen</span>
+      </button>
+      <div id="kkr-audio" style="display:none;margin-top:8px;background:var(--kkr-red);border-radius:6px;padding:4px;">
+        <iframe src="https://drive.google.com/file/d/1lyIQnTyndZyxnn-swQTu-U5ndMprqikI/preview"
+                width="100%" height="54" frameborder="0" allow="autoplay"
+                style="border-radius:4px;overflow:hidden;display:block;"></iframe>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═════════════════════════════
+     NAV
+═════════════════════════════ -->
+<nav class="nav-bar">
+  <div class="nav-caret nav-caret-left" id="navCaretLeft">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </div>
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="showSection('exec')">Executive Summary</button>
+    <button class="nav-tab" onclick="showSection('market')">Market Crosscurrents</button>
+    <button class="nav-tab" onclick="showSection('forecasts')">Forecast Revisions</button>
+    <button class="nav-tab" onclick="showSection('oil')">Oil Scenarios</button>
+    <button class="nav-tab" onclick="showSection('inflation')">Inflation</button>
+    <button class="nav-tab" onclick="showSection('equity')">S&amp;P 500</button>
+    <button class="nav-tab" onclick="showSection('credit')">Private Credit</button>
+    <button class="nav-tab" onclick="showSection('regime')">Regime Change</button>
+    <button class="nav-tab" onclick="showSection('disclaimer')">Disclaimer</button>
+    <a href="https://www.kkr.com/content/dam/kkr/insights/pdf/2026-april-flash-macro-us-markets.pdf"
+       target="_blank" rel="noopener noreferrer"
+       style="display:inline-flex;align-items:center;gap:6px;padding:0 16px;margin-left:auto;text-decoration:none;white-space:nowrap;border-left:1px solid var(--kkr-border);"
+       onmouseover="this.style.background='var(--kkr-blue-tint)'" onmouseout="this.style.background='transparent'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#EB2226" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--kkr-red);">PDF</span>
+    </a>
+  </div>
+  <div class="nav-caret nav-caret-right" id="navCaretRight">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+</nav>
+<div class="nav-bar-spacer"></div>
+
+<div class="section active" id="sec-exec">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">—</span>
+      <h2 class="sec-title">Executive Summary</h2>
+    </div>
+    <p class="sec-sub">Five critical findings from the KKR Global Macro &amp; Asset Allocation Flash Update, April 2026</p>
+
+    <!-- KPI Strip -->
+    <div class="kpi-strip" id="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-label">WTI Base Case 2026</div>
+        <div class="kpi-val up">$90–100</div>
+        <div class="kpi-change neg">▲ +$18 vs. prior</div>
+        <div class="kpi-sub">per barrel average</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">U.S. Real GDP 2026e</div>
+        <div class="kpi-val down">2.0%</div>
+        <div class="kpi-change neg">▼ −0.5pp vs. prior</div>
+        <div class="kpi-sub">Below consensus 2.3%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Headline CPI 2026e</div>
+        <div class="kpi-val up">3.8%</div>
+        <div class="kpi-change neg">▲ +0.5pp vs. prior</div>
+        <div class="kpi-sub">Above consensus 3.0%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Fed Funds End-2027</div>
+        <div class="kpi-val up">3.125%</div>
+        <div class="kpi-change pos">▼ −0.25pp vs. prior</div>
+        <div class="kpi-sub">1 cut '26 · 1 cut '27</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">S&amp;P 500 Target 2026</div>
+        <div class="kpi-val down">7,300</div>
+        <div class="kpi-change neg">▼ −300 vs. prior 7,600</div>
+        <div class="kpi-sub">EPS growth cut to 8%</div>
+      </div>
+    </div>
+
+    <!-- 5 Key Findings -->
+    <div class="exec-grid" id="exec-cards">
+
+      <div class="exec-card c-red">
+        <div class="exec-num">01</div>
+        <div class="exec-title">Markets are materially underpricing the Iran conflict</div>
+        <div class="exec-body">Equities and credit have priced in only <strong>35% of the S&amp;P 500 drawdown</strong> and <strong>27% of the leveraged loan spread widening</strong> seen during Liberation Day. Inflation breakevens reflect just 67% of the Ukraine invasion response. KKR believes this optimism is misplaced — supply chains were already tight before the Hormuz closure, and the disruption is already rippling through Asia. Betting markets show only a 30% probability of a U.S.–Iran ceasefire in April.</div>
+        <span class="exec-tag tag-risk">High Conviction Risk</span>
+      </div>
+
+      <div class="exec-card c-blue">
+        <div class="exec-num">02</div>
+        <div class="exec-title">Oil becomes the dominant macro variable — base case $90–100 WTI</div>
+        <div class="exec-body">KKR elevates its 60% base case to <strong>$90–100 WTI ($100–110 Brent)</strong> in 2026, with peak months in the <strong>mid-$100s</strong>. The prior base of $75–80 becomes the 15% low scenario. The 25% high case — Hormuz restrictions plus Gulf infrastructure damage — implies an average of <strong>$130 with peaks near $180 (Brent +$200)</strong>. Beyond 2026, WTI is expected to average $75–80, $5–10 above the forward curve, reflecting a persistent geopolitical risk premium.</div>
+        <span class="exec-tag tag-watch">Key Watch Variable</span>
+      </div>
+
+      <div class="exec-card c-blue">
+        <div class="exec-num">03</div>
+        <div class="exec-title">Growth headwinds accelerate faster than historical models predict</div>
+        <div class="exec-body">U.S. GDP is cut to <strong>2.0% in 2026 and 1.6% in 2027</strong>, both below consensus. Unlike typical demand-driven energy shocks, this is a pure supply shock — KKR expects the energy "tax" on disposable incomes to weigh on growth <strong>as soon as Q2 2026</strong>, versus the typical 4–6 quarter lag. Discretionary consumption faces acute pressure: the lowest income quintile spends <strong>17.4% of pre-tax income on energy</strong>, versus just 2.7% for the highest quintile.</div>
+        <span class="exec-tag tag-signal">Growth Warning</span>
+      </div>
+
+      <div class="exec-card c-green">
+        <div class="exec-num">04</div>
+        <div class="exec-title">Private Credit: recovery rates, not defaults, define this cycle</div>
+        <div class="exec-body">Fitch's broad default measure — including PIK and amend-and-extend — has run at <strong>5–6% for two years and is trending up to 5.6%</strong>. KKR expects recovery rates, not headline defaults, to define outcomes. Historical recovery rates of <strong>50–60% could fall to 30–40%</strong> for smaller companies with loose deal terms or where lenders are unwilling to take over. Endgame winners will originate well, construct thoughtfully, and actively manage underperformers.</div>
+        <span class="exec-tag tag-action">Portfolio Lens</span>
+      </div>
+
+      <div class="exec-card c-navy wide">
+        <div class="exec-num">05</div>
+        <div class="exec-title">Regime Change is real — traditional 60/40 portfolio construction is failing</div>
+        <div class="exec-body">Since 2020, four forces have been reshaping the macro backdrop: <strong>larger fiscal deficits, heightened geopolitical uncertainty, a messy energy transition, and stickier, more volatile inflation.</strong> The Iran conflict reinforces all four. Stocks and bonds are now positively correlated, eroding traditional diversification. The 5-year efficient frontier has narrowed — the return differential between best and worst assets is now <strong>7.4%</strong>, down from 9.1% a few years ago. KKR recommends leaning into Private Markets: operational alpha in PE, upfront yield in Private Credit, and inflation-linked cashflows in Infrastructure and Asset-Based Finance.</div>
+        <span class="exec-tag tag-macro">Structural Macro Thesis</span>
+      </div>
+
+    </div>
+
+    <!-- Muddle-Through Thesis Card -->
+    <div class="pullquote" style="margin-bottom:24px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6DA3CE;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+        <span style="display:inline-block;width:16px;height:2px;background:var(--kkr-red);border-radius:1px;flex-shrink:0;"></span>
+        KKR Core Thesis — April 2026
+      </div>
+      <div class="pq-text">"We subscribe to the muddle through thesis — markets are digesting geopolitics, a re-fueled inflation debate, private credit normalization, and AI's unresolved impact on growth and employment all at once. Oil is the fastest transmission channel through which geopolitics can alter the path for inflation, growth, and central bank policy."</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(185,207,237,0.15);">
+        <div style="width:34px;height:34px;border-radius:50%;background:rgba(185,207,237,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(185,207,237,0.25);">
+          <span style="font-size:11px;font-weight:700;color:rgba(185,207,237,0.9);font-family:var(--mono);letter-spacing:0.05em;">HM</span>
+        </div>
+        <div>
+          <div class="pq-attr">Henry H. McVey</div>
+          <div style="font-size:12px;color:rgba(185,207,237,0.6);font-weight:300;margin-top:1px;">Head of Global Macro, Balance Sheet &amp; Risk, CIO of KKR's Balance Sheet</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 2: MARKET CROSSCURRENTS
+═══════════════════════════════════════ -->
+<div class="section" id="sec-market">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">1</span>
+      <h2 class="sec-title">Market Crosscurrents</h2>
+    </div>
+    <p class="sec-sub">Exhibit 1 — Markets are treating this conflict very differently than prior geopolitical events, and KKR is not convinced the more optimistic approach is the right one</p>
+
+    <!-- Exhibit 1A — Radar Chart -->
+    <div class="chart-card full visible" style="margin-bottom:20px;">
+      <div class="chart-card-label">Exhibit 1A</div>
+      <div class="chart-card-title">Iran Conflict vs. Prior Dislocations — Radar Comparison</div>
+      <div style="font-size:13px;color:rgba(1,41,92,0.55);margin-bottom:14px;padding:10px 16px;background:var(--kkr-blue-tint);border-radius:8px;border-left:3px solid var(--kkr-blue);">
+        <strong style="color:var(--kkr-navy);">Baseline: Ukraine Invasion = 100%</strong> on every axis. Values show each event's reading as a percentage of the Ukraine Invasion stress peak for that metric.
+      </div>
+      <div class="chart-legend">
+        <span class="leg-item"><span class="leg-dot" style="background:#EB2226;"></span>Iran Current</span>
+        <span class="leg-item"><span class="leg-dot" style="background:#B9CFED;border:1.5px solid #3A7EBB;"></span>Ukraine Invasion (baseline = 100%)</span>
+        <span class="leg-item"><span class="leg-dot" style="background:#075AAA;"></span>Liberation Day</span>
+      </div>
+      <div style="position:relative;height:400px;max-width:580px;margin:0 auto;">
+        <canvas id="radarChart" role="img" aria-label="Radar chart comparing Iran conflict market pricing against Ukraine invasion baseline (100%) and Liberation Day across five metrics: CPI Breakeven, WTI Crude, LNG, Leveraged Loan Spreads, and S&P 500 Drawdown. Ukraine Invasion is the 100% baseline on all axes.">Radar: Ukraine Invasion = 100% baseline. Iran Current sits well inside on all metrics, showing significant underpricing relative to prior stress events.</canvas>
+      </div>
+      <div class="chart-source">Data as at March 30, 2026. All values expressed as % of Ukraine Invasion stress peak (= 100% baseline). Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis.</div>
+    </div>
+
+    <div class="chart-card full visible" style="margin-bottom:20px;">
+      <div class="chart-card-label">Exhibit 1B</div>
+      <div class="chart-card-title">Comparison of Ongoing Iran Conflict With Other Recent Market Dislocations</div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;" class="comp-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Iran (Current)</th>
+              <th>Ukraine Invasion Trough</th>
+              <th>Liberation Day Trough</th>
+              <th>Current as % of Ukraine</th>
+              <th>Current as % of Lib. Day</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="metric">2yr CPI Breakeven</td>
+              <td><span class="heatcell h-neutral">3.3%</span></td>
+              <td>4.9%</td><td>3.4%</td>
+              <td><span class="heatcell h-mid">67%</span></td>
+              <td><span class="heatcell h-high">98%</span></td>
+            </tr>
+            <tr>
+              <td class="metric">12mo Fwd WTI Crude ($/bbl)</td>
+              <td><span class="heatcell h-mid">$73</span></td>
+              <td>$100</td><td>$69</td>
+              <td><span class="heatcell h-mid">74%</span></td>
+              <td><span class="heatcell h-low">N.M.</span></td>
+            </tr>
+            <tr>
+              <td class="metric">Japan-Korea LNG 12mo Fwd</td>
+              <td><span class="heatcell h-low">2,431</span></td>
+              <td>10,113</td><td>2,301</td>
+              <td><span class="heatcell h-low">24%</span></td>
+              <td><span class="heatcell h-high">106%</span></td>
+            </tr>
+            <tr>
+              <td class="metric">Leveraged Loan Spread Widening (bps)</td>
+              <td><span class="heatcell h-low">53</span></td>
+              <td>198</td><td>92</td>
+              <td><span class="heatcell h-low">27%</span></td>
+              <td><span class="heatcell h-mid">58%</span></td>
+            </tr>
+            <tr>
+              <td class="metric">S&amp;P 500 Drawdown</td>
+              <td><span class="heatcell h-mid">−6%</span></td>
+              <td>−18%</td><td>−19%</td>
+              <td><span class="heatcell h-low">35%</span></td>
+              <td><span class="heatcell h-low">33%</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="chart-source">Data as at March 30, 2026. Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis.<br>Color: <span style="background:#D6F4E7;color:#1A7A4A;padding:1px 6px;border-radius:3px;font-size:13px;">Low relative pricing</span>&nbsp; <span style="background:var(--kkr-blue-tint);color:var(--kkr-blue);padding:1px 6px;border-radius:3px;font-size:13px;">Moderate</span>&nbsp; <span style="background:#FEF0F0;color:#B01418;padding:1px 6px;border-radius:3px;font-size:13px;">Near prior stress levels</span></div>
+    </div>
+
+
+
+    <div class="chart-grid-2" id="market-charts">
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 3</div>
+        <div class="chart-card-title">Share of Global Seaborne Commodity Flows Transiting Hormuz (2025)</div>
+        <div class="chart-legend">
+          <span class="leg-item"><span class="leg-dot" style="background:#075AAA;"></span>ME Gulf Exports</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#B9CFED;"></span>ME Gulf Imports</span>
+        </div>
+        <div style="position:relative;height:310px;">
+          <canvas id="hormuzChart" role="img" aria-label="Horizontal bar chart. Fertiliser has the highest transit share near 32%, followed by Methanol near 27% and Crude near 24%.">Hormuz transit: Fertiliser ~32%, Methanol ~27%, Crude ~24%.</canvas>
+        </div>
+        <div class="chart-source">Source: Kpler. Data as at December 31, 2025.</div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 6</div>
+        <div class="chart-card-title">Global Crude &amp; Refined Products — % Change Since February 28, 2026</div>
+        <div class="chart-legend">
+          <span class="leg-item"><span class="leg-dot" style="background:#EB2226;"></span>+100% or more</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#B9CFED;"></span>60–100%</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#075AAA;"></span>Under 60%</span>
+        </div>
+        <div style="position:relative;height:310px;">
+          <canvas id="energyChart" role="img" aria-label="Bar chart showing energy price changes since February 28. Asia Diesel up 141%, Asia Jet Fuel up 134%, EZ Jet Fuel up 106%, US Jet Fuel 98%, Asia Gas 90%.">Energy % change since Feb 28: Asia Diesel +141%, Asia Jet +134%, EZ Jet +106%.</canvas>
+        </div>
+        <div class="chart-source">Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis. Data as at March 27, 2026.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 3: FORECASTS
+═══════════════════════════════════════ -->
+<div class="section" id="sec-forecasts">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">2</span>
+      <h2 class="sec-title">Forecast Revisions</h2>
+    </div>
+    <p class="sec-sub">Exhibit 12 — Updated U.S. base, low, and high scenarios across WTI, GDP, CPI, and Fed Funds; all variables revised on higher energy prices</p>
+
+    <!-- ── Scenario Fan Charts — Exhibit 12A ── -->
+    <div class="chart-card full visible" style="margin-bottom:20px;border-top:3px solid var(--kkr-navy);">
+      <div class="chart-card-label">Exhibit 12A — Scenario Fan Charts</div>
+      <div class="chart-card-title">Small Multiples — Scenario Fan per Variable, 2024–2027</div>
+      <p style="font-size:14px;color:rgba(1,41,92,0.55);margin-bottom:20px;line-height:1.6;">Solid line = Base case (60%). Shaded band = Low-to-High scenario range. Hover any point to see Base, Low, and High values.</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:rgba(1,41,92,0.6);margin-bottom:8px;text-align:center;letter-spacing:0.05em;">WTI ($/bbl)</div>
+          <div style="position:relative;height:200px;"><canvas id="fanWTI" role="img" aria-label="WTI scenario fan chart showing base case with low-high band 2024-2027.">WTI fan</canvas></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:rgba(1,41,92,0.6);margin-bottom:8px;text-align:center;letter-spacing:0.05em;">U.S. Real GDP (%)</div>
+          <div style="position:relative;height:200px;"><canvas id="fanGDP" role="img" aria-label="GDP scenario fan chart showing base case with low-high band 2024-2027.">GDP fan</canvas></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:rgba(1,41,92,0.6);margin-bottom:8px;text-align:center;letter-spacing:0.05em;">Headline CPI (%)</div>
+          <div style="position:relative;height:200px;"><canvas id="fanCPI" role="img" aria-label="CPI scenario fan chart showing base case with low-high band 2024-2027.">CPI fan</canvas></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:rgba(1,41,92,0.6);margin-bottom:8px;text-align:center;letter-spacing:0.05em;">Fed Funds (%)</div>
+          <div style="position:relative;height:200px;"><canvas id="fanFed" role="img" aria-label="Fed Funds scenario fan chart showing base case with low-high band 2024-2027.">Fed fan</canvas></div>
+        </div>
+      </div>
+      <div class="chart-legend" style="margin-top:16px;justify-content:center;">
+        <span class="leg-item"><span class="leg-dot" style="background:#075AAA;"></span>Base 60%</span>
+        <span class="leg-item"><span class="leg-dot" style="background:#EB2226;border:1.5px dashed #EB2226;background:none;width:16px;height:3px;border-radius:1px;"></span>High 25%</span>
+        <span class="leg-item"><span class="leg-dot" style="background:#1A7A4A;border:1.5px dashed #1A7A4A;background:none;width:16px;height:3px;border-radius:1px;"></span>Low 15%</span>
+        <span class="leg-item"><span style="display:inline-block;width:16px;height:10px;background:rgba(7,90,170,0.12);border-radius:2px;"></span>Scenario range</span>
+      </div>
+      <div class="chart-source" style="margin-top:10px;">Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis. Data as at March 27, 2026. Bold = base case. Hover any data point to see all three scenario values.</div>
+    </div>
+
+    <div class="chart-card full visible" style="margin-bottom:20px;">
+      <div class="chart-card-label">Exhibit 12B — U.S. Forecast Revisions Table</div>
+      <div class="chart-card-title">Headline CPI Moves Higher on Energy — Base / Low / High Scenarios</div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;" class="fc-table-wrap">
+        <table class="fc-table">
+          <thead>
+            <tr>
+              <th rowspan="2">Year</th>
+              <th colspan="3" style="border-right:1px solid rgba(185,207,237,0.25);">WTI ($/bbl)</th>
+              <th colspan="3" style="border-right:1px solid rgba(185,207,237,0.25);">U.S. Real GDP</th>
+              <th colspan="3" style="border-right:1px solid rgba(185,207,237,0.25);">U.S. Headline CPI</th>
+              <th colspan="3">Fed Funds</th>
+            </tr>
+            <tr class="grp">
+              <th>Base 60%</th><th>Low 15%</th><th class="grp-div">High 25%</th>
+              <th>Base 60%</th><th>Low 25%</th><th class="grp-div">High 15%</th>
+              <th>Base 60%</th><th>Low 15%</th><th class="grp-div">High 25%</th>
+              <th>Base 60%</th><th>Low 25%</th><th>High 15%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2024a</td>
+              <td>76</td><td>76</td><td class="grp-div">76</td>
+              <td>2.8%</td><td>2.8%</td><td class="grp-div">2.8%</td>
+              <td>3.0%</td><td>3.0%</td><td class="grp-div">3.0%</td>
+              <td>4.38%</td><td>4.38%</td><td>4.38%</td>
+            </tr>
+            <tr>
+              <td>2025a</td>
+              <td>65</td><td>65</td><td class="grp-div">65</td>
+              <td>2.1%</td><td>2.1%</td><td class="grp-div">2.1%</td>
+              <td>2.7%</td><td>2.7%</td><td class="grp-div">2.7%</td>
+              <td>3.63%</td><td>3.63%</td><td>3.88%</td>
+            </tr>
+            <tr class="base-row">
+              <td>2026e</td>
+              <td><strong>95</strong></td><td>77</td><td class="grp-div">130</td>
+              <td><strong>2.0%</strong></td><td>0.5%</td><td class="grp-div">2.5%</td>
+              <td><strong class="up">3.8%</strong></td><td>3.3%</td><td class="grp-div">4.8%</td>
+              <td><strong>3.38%</strong></td><td>2.13%</td><td>4.13%</td>
+            </tr>
+            <tr class="base-row">
+              <td>2027e</td>
+              <td><strong>83</strong></td><td>70</td><td class="grp-div">100</td>
+              <td><strong class="dn">1.6%</strong></td><td>0.5%</td><td class="grp-div">2.2%</td>
+              <td><strong>2.5%</strong></td><td>2.2%</td><td class="grp-div">2.6%</td>
+              <td><strong>3.13%</strong></td><td>1.13%</td><td>3.88%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;padding-top:14px;border-top:0.5px solid var(--kkr-border);">
+        <div style="font-size:13.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(1,41,92,0.38);margin-bottom:8px;">Change vs. Prior Forecast — 2026e Base Case</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+          <div style="text-align:center;padding:10px;background:var(--kkr-blue-tint);border-radius:8px;">
+            <div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--kkr-blue);">+$18</div>
+            <div style="font-size:13px;color:rgba(1,41,92,0.5);margin-top:3px;">WTI $/bbl</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#FEF0F0;border-radius:8px;">
+            <div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--kkr-red);">−0.5pp</div>
+            <div style="font-size:13px;color:rgba(1,41,92,0.5);margin-top:3px;">Real GDP 2026e</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#FEF0F0;border-radius:8px;">
+            <div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--kkr-red);">+0.5pp</div>
+            <div style="font-size:13px;color:rgba(1,41,92,0.5);margin-top:3px;">CPI 2026e</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:var(--kkr-blue-tint);border-radius:8px;">
+            <div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--kkr-blue);">+0.25pp</div>
+            <div style="font-size:13px;color:rgba(1,41,92,0.5);margin-top:3px;">10yr UST 2026e</div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-source">Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis. Data as at March 27, 2026. Bold = base case.</div>
+    </div>
+
+    <div class="chart-grid-2" id="forecast-charts">
+      <div class="chart-card">
+        <div class="chart-card-label">KKR GMAA vs. Consensus — 2026e</div>
+        <div class="chart-card-title">Where KKR diverges from street expectations</div>
+        <div style="position:relative;height:240px;">
+          <canvas id="vsConsensusChart" role="img" aria-label="Bar chart: KKR WTI is $11 above consensus, GDP is 0.3pp below, CPI is 0.8pp above, 10yr UST is 0.25pp above.">KKR vs Consensus 2026e: WTI +11, GDP -0.3pp, CPI +0.8pp, 10yr UST +0.25pp.</canvas>
+        </div>
+        <div class="chart-source">Source: Bloomberg, KKR GMAA analysis. Data as at March 27, 2026.</div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 15 — Labor market context</div>
+        <div class="chart-card-title">Monthly NFP required to hold unemployment constant — declining as immigration fades</div>
+        <div style="position:relative;height:240px;">
+          <canvas id="nfpChart" role="img" aria-label="Line chart showing approximate monthly non-farm payroll growth required to maintain constant unemployment dropping from ~150k in 2023-24 to ~50k by 2026-2028 as net immigration fades.">Monthly NFP breakeven drops from 150k in 2023-24 to ~50k by 2026-28.</canvas>
+        </div>
+        <div class="chart-source">Source: U.S. Bureau of Economic Analysis, Haver Analytics, KKR GMAA. Data as at September 30, 2025.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 4: OIL SCENARIOS
+═══════════════════════════════════════ -->
+<div class="section" id="sec-oil">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">3</span>
+      <h2 class="sec-title">Oil Price Scenarios</h2>
+    </div>
+    <p class="sec-sub">Exhibit 4 — WTI crude oil price scenarios 2019–2028; oil is the fastest channel through which geopolitics alters inflation, growth, and central bank policy</p>
+
+    <div class="scenario-row">
+      <span class="label">Scenarios:</span>
+      <span class="s-pill base">Base 60% — Avg. $90–100 WTI, Peak mid-$100s</span>
+      <span class="s-pill high">High 25% — Avg. $130, Peak ~$180</span>
+      <span class="s-pill low">Low 15% — Avg. $75–80, Peaks low-$100s</span>
+    </div>
+
+    <div class="chart-card full visible" style="margin-bottom:20px;">
+      <div class="chart-card-label">Exhibit 4</div>
+      <div class="chart-card-title">WTI Crude Oil Price Scenarios, US$/bbl</div>
+      <div class="chart-legend">
+        <span class="leg-item"><span class="leg-line" style="background:#01295C;"></span>Historical</span>
+        <span class="leg-item"><span class="leg-line" style="background:#075AAA;"></span>Base 60%</span>
+        <span class="leg-item"><span class="leg-line" style="background:#EB2226;height:2px;border-top:2px dashed #EB2226;background:none;"></span>High 25%</span>
+        <span class="leg-item"><span class="leg-line" style="background:#1A7A4A;height:2px;border-top:2px dashed #1A7A4A;background:none;"></span>Low 15%</span>
+        <span class="leg-item"><span class="leg-line" style="background:#B9CFED;height:1px;border-top:1px dashed #B9CFED;background:none;"></span>Futures</span>
+      </div>
+      <div style="position:relative;height:400px;">
+        <canvas id="oilChart" role="img" aria-label="Line chart of WTI oil price from 2019 to 2028. Historical from 2019-2025 shows range from $41 low in 2020 to $95 high in 2022. Three forward scenarios: Base averaging $90-100 in 2026 with peaks mid-$100s; High averaging $130 peak $180; Low averaging $75-80.">WTI scenarios 2019-2028: Base $90-100, High $130 avg $180 peak, Low $75-80.</canvas>
+      </div>
+      <div class="chart-source">Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis. Data as at March 27, 2026.</div>
+    </div>
+
+    <div class="chart-grid-3" id="oil-scenario-cards">
+      <div class="chart-card" style="border-top:3px solid var(--kkr-blue);display:flex;flex-direction:column;">
+        <div class="chart-card-label">Base Case — 60% Probability</div>
+        <div class="chart-card-title">$90–100 WTI · $100–110 Brent</div>
+        <div style="font-size:16px;color:rgba(1,41,92,0.65);line-height:1.65;flex:1;">Hormuz remains closed weeks–months, not days. Limited infrastructure damage; most shut-ins precautionary. OECD inventories fall ~300–400Mb to <strong style="color:var(--kkr-navy);">56 days supply</strong> — lowest since 2011. Peak months mid-$100s; full-year average $90–100. Post-2026 WTI: $75–80 with persistent geopolitical risk premium.</div>
+        <div style="margin-top:14px;padding:10px 14px;background:var(--kkr-blue-tint);border-radius:8px;">
+          <div style="font-size:14px;font-weight:600;color:rgba(1,41,92,0.5);margin-bottom:3px;">OECD Days of Supply</div>
+          <div style="font-size:24px;font-family:var(--mono);font-weight:600;color:var(--kkr-navy);">56 days</div>
+          <div style="font-size:13px;color:rgba(1,41,92,0.4);">vs. 63 pre-conflict</div>
+        </div>
+      </div>
+      <div class="chart-card" style="border-top:3px solid var(--kkr-red);display:flex;flex-direction:column;">
+        <div class="chart-card-label">High Case — 25% Probability</div>
+        <div class="chart-card-title">Avg. $130 WTI · Peak ~$180</div>
+        <div style="font-size:16px;color:rgba(1,41,92,0.65);line-height:1.65;flex:1;">Extended Hormuz closure plus significant Gulf infrastructure destruction. OECD supply drops to <strong style="color:var(--kkr-navy);">52 days</strong>. Comparable in magnitude to the 1973–74 OPEC oil embargo tripling. Demand destruction eventually limits structural persistence. Consistent with in-house forecasts of major oil producers.</div>
+        <div style="margin-top:14px;padding:10px 14px;background:#FEF0F0;border-radius:8px;">
+          <div style="font-size:14px;font-weight:600;color:rgba(176,20,24,0.7);margin-bottom:3px;">OECD Days of Supply</div>
+          <div style="font-size:24px;font-family:var(--mono);font-weight:600;color:var(--kkr-red);">52 days</div>
+          <div style="font-size:13px;color:rgba(176,20,24,0.5);">Brent +$200 peak</div>
+        </div>
+      </div>
+      <div class="chart-card" style="border-top:3px solid var(--kkr-green);display:flex;flex-direction:column;">
+        <div class="chart-card-label">Low Case — 15% Probability</div>
+        <div class="chart-card-title">$75–80 WTI · $85–90 Brent</div>
+        <div style="font-size:16px;color:rgba(1,41,92,0.65);line-height:1.65;flex:1;">Prior March base case. Requires a meaningful breakthrough in negotiations within <strong style="color:var(--kkr-navy);">1–2 weeks</strong>. Peaks in the low-$100s. KKR views this as increasingly unlikely given that the U.S., Israel, and Iran appear to have different definitions of a workable endgame.</div>
+        <div style="margin-top:14px;padding:10px 14px;background:#D6F4E7;border-radius:8px;">
+          <div style="font-size:14px;font-weight:600;color:rgba(26,122,74,0.7);margin-bottom:3px;">Requires breakthrough in</div>
+          <div style="font-size:24px;font-family:var(--mono);font-weight:600;color:var(--kkr-green);">1–2 weeks</div>
+          <div style="font-size:13px;color:rgba(26,122,74,0.5);">KKR views as unlikely</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 5: INFLATION
+═══════════════════════════════════════ -->
+<div class="section" id="sec-inflation">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">4</span>
+      <h2 class="sec-title">U.S. Inflation Outlook</h2>
+    </div>
+    <p class="sec-sub">Exhibit 19 — Energy drives the headline shock; core remains contained; second-round effects are expected to stay limited and gradual</p>
+
+    <div class="chart-grid-2" style="margin-bottom:20px;" id="inflation-charts">
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 19 — Quarterly CPI Forecasts</div>
+        <div class="chart-card-title">Headline vs. Core CPI — 2026e to 2027e progression</div>
+        <div class="chart-legend">
+          <span class="leg-item"><span class="leg-dot" style="background:#075AAA;"></span>Headline CPI</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#3A7EBB;border:1.5px dashed #3A7EBB;background:none;"></span>Core CPI (80%)</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#EB2226;"></span>Energy (7%)</span>
+        </div>
+        <div style="position:relative;height:280px;">
+          <canvas id="cpiChart" role="img" aria-label="Line chart. Headline CPI rises sharply to 4.6% in Q2 2026 before declining to 2.2% by Q4 2027. Core stays near 2.6-3.1% throughout. Energy spikes to 29.9% in Q2 2026.">Headline CPI peaks 4.6% Q2 2026; core stays 2.6-3.1%.</canvas>
+        </div>
+        <div class="chart-source">Source: Bloomberg, KKR GMAA. Data as at March 27, 2026.</div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 18 — Energy burden by income</div>
+        <div class="chart-card-title">Annual Energy Spend as % of Pre-Tax Income — Lower-income households most challenged</div>
+        <div style="position:relative;height:280px;">
+          <canvas id="incomeChart" role="img" aria-label="Bar chart: Lowest 20% income quintile spends 17.4% of pretax income on energy. 2nd quintile 9.8%, Middle 6.8%, 4th 5.0%, Highest 20% only 2.7%.">Energy burden: lowest quintile 17.4%, highest quintile 2.7%.</canvas>
+        </div>
+        <div class="chart-source">Source: 2024 BLS Survey of Consumer Expenditures, Haver Analytics, KKR GMAA. Data as at March 10, 2026.</div>
+      </div>
+    </div>
+
+    <div class="chart-card full visible">
+      <div class="chart-card-label">CPI Component Forecasts — Full Year</div>
+      <div class="chart-card-title">Energy dominates the 2026 revision; core spillovers remain limited at +0.1pp</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:8px 0;">
+        <div>
+          <div style="font-size:13.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(1,41,92,0.38);margin-bottom:14px;">2026 Full Year Estimates</div>
+          <div class="bar-row"><span class="bar-label">Headline CPI</span><div class="bar-track"><div class="bar-fill" data-w="79" style="background:#075AAA;"></div></div><span class="bar-val">3.8%</span></div>
+          <div class="bar-row"><span class="bar-label">Energy component (7%)</span><div class="bar-track"><div class="bar-fill" data-w="100" style="background:#EB2226;"></div></div><span class="bar-val">18.4%</span></div>
+          <div class="bar-row"><span class="bar-label">Food (13%)</span><div class="bar-track"><div class="bar-fill" data-w="60" style="background:#3A7EBB;"></div></div><span class="bar-val">2.9%</span></div>
+          <div class="bar-row"><span class="bar-label">Core CPI (80%)</span><div class="bar-track"><div class="bar-fill" data-w="58" style="background:#6DB3CE;"></div></div><span class="bar-val">2.8%</span></div>
+          <div class="bar-row"><span class="bar-label">Shelter (35%)</span><div class="bar-track"><div class="bar-fill" data-w="58" style="background:#B9CFED;"></div></div><span class="bar-val">2.8%</span></div>
+          <div class="bar-row"><span class="bar-label">Medical (7%)</span><div class="bar-track"><div class="bar-fill" data-w="85" style="background:#6D9CBB;"></div></div><span class="bar-val">4.1%</span></div>
+          <div class="bar-row"><span class="bar-label">Supercore ex-Shelter</span><div class="bar-track"><div class="bar-fill" data-w="73" style="background:#01295C;"></div></div><span class="bar-val">3.6%</span></div>
+        </div>
+        <div>
+          <div style="font-size:13.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(1,41,92,0.38);margin-bottom:14px;">2027 Full Year Estimates</div>
+          <div class="bar-row"><span class="bar-label">Headline CPI</span><div class="bar-track"><div class="bar-fill" data-w="52" style="background:#075AAA;"></div></div><span class="bar-val">2.5%</span></div>
+          <div class="bar-row"><span class="bar-label">Energy component (7%)</span><div class="bar-track"><div class="bar-fill" data-w="14" style="background:#EB2226;"></div></div><span class="bar-val">2.7%</span></div>
+          <div class="bar-row"><span class="bar-label">Food (13%)</span><div class="bar-track"><div class="bar-fill" data-w="50" style="background:#3A7EBB;"></div></div><span class="bar-val">2.4%</span></div>
+          <div class="bar-row"><span class="bar-label">Core CPI (80%)</span><div class="bar-track"><div class="bar-fill" data-w="54" style="background:#6DB3CE;"></div></div><span class="bar-val">2.6%</span></div>
+          <div class="bar-row"><span class="bar-label">Shelter (35%)</span><div class="bar-track"><div class="bar-fill" data-w="50" style="background:#B9CFED;"></div></div><span class="bar-val">2.4%</span></div>
+          <div class="bar-row"><span class="bar-label">Medical (7%)</span><div class="bar-track"><div class="bar-fill" data-w="92" style="background:#6D9CBB;"></div></div><span class="bar-val">4.5%</span></div>
+          <div class="bar-row"><span class="bar-label">Supercore ex-Shelter</span><div class="bar-track"><div class="bar-fill" data-w="76" style="background:#01295C;"></div></div><span class="bar-val">3.7%</span></div>
+        </div>
+      </div>
+      <div class="chart-source">Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis. Data as at March 27, 2026.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 6: S&P 500
+═══════════════════════════════════════ -->
+<div class="section" id="sec-equity">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">5</span>
+      <h2 class="sec-title">S&amp;P 500 Outlook</h2>
+    </div>
+    <p class="sec-sub">Exhibits 25–27 — Year-end targets lowered; EPS growth cut to 8%; near-term downside risk below 6,000; market-implied growth remains elevated vs. history</p>
+
+    <div class="chart-grid-2" style="margin-bottom:20px;" id="equity-charts">
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 25 — EPS Decomposition</div>
+        <div class="chart-card-title">2026 S&amp;P 500 EPS Growth — Impact from ~$100/bbl WTI</div>
+        <div style="position:relative;height:300px;">
+          <canvas id="epsChart" role="img" aria-label="Waterfall bar chart. GMAA starts at 11% EPS growth. Oil opex hit subtracts 1.4%. 50bp GDP downgrade subtracts 1.5%. New GMAA estimate is 8%. Bottom-up consensus is 17%. Top-down consensus is 11%.">EPS: start 11%, oil opex -1.4%, GDP drag -1.5% = 8% GMAA vs 11-17% consensus.</canvas>
+        </div>
+        <div class="chart-source">Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis. Data as at March 27, 2026.</div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 27 — Market-Implied EPS Growth</div>
+        <div class="chart-card-title">S&amp;P 500 2-Stage Dividend Discount Model — Still elevated vs. 2010–19 average</div>
+        <div style="position:relative;height:300px;">
+          <canvas id="impliedEpsChart" role="img" aria-label="Bar chart: Tech Bubble Peak implied EPS growth 22%, Start of 2026 15%, Today March 2026 13%, 2010-19 average 7%.">Market-implied EPS growth: Tech Bubble 22%, Start 2026 15%, Today 13%, 2010-19 avg 7%.</canvas>
+        </div>
+        <div class="chart-source">Source: Bloomberg, KKR GMAA. Data as at March 28, 2026.</div>
+      </div>
+    </div>
+
+    <div class="chart-card full visible" style="margin-bottom:20px;">
+      <div class="chart-card-label">Year-End Targets &amp; Downside Scenario</div>
+      <div class="chart-card-title">Updated S&amp;P 500 Targets — Choppier path, fatter left tail than markets were pricing weeks ago</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:8px 0;">
+        <div style="text-align:center;padding:16px;background:var(--kkr-blue-tint);border-radius:10px;">
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(1,41,92,0.4);margin-bottom:6px;">2026 Target (revised)</div>
+          <div style="font-size:32px;font-family:var(--mono);font-weight:600;color:var(--kkr-navy);">7,300</div>
+          <div style="font-size:15px;color:var(--kkr-red);font-weight:600;margin-top:4px;">▼ from 7,600</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--kkr-blue-tint);border-radius:10px;">
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(1,41,92,0.4);margin-bottom:6px;">2027 Target (revised)</div>
+          <div style="font-size:32px;font-family:var(--mono);font-weight:600;color:var(--kkr-navy);">7,800</div>
+          <div style="font-size:15px;color:var(--kkr-red);font-weight:600;margin-top:4px;">▼ from 8,130</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#FEF0F0;border-radius:10px;">
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(176,20,24,0.5);margin-bottom:6px;">Near-Term Downside</div>
+          <div style="font-size:32px;font-family:var(--mono);font-weight:600;color:var(--kkr-red);">&lt;6,000</div>
+          <div style="font-size:15px;color:rgba(176,20,24,0.7);font-weight:600;margin-top:4px;">15–20% drawdown</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--kkr-blue-tint);border-radius:10px;">
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(138,98,0,0.6);margin-bottom:6px;">NTM P/E at 6,000</div>
+          <div style="font-size:32px;font-family:var(--mono);font-weight:600;color:var(--kkr-blue);">~18x</div>
+          <div style="font-size:15px;color:rgba(138,98,0,0.7);font-weight:600;margin-top:4px;">Stabilization level</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:14px 16px;background:rgba(1,41,92,0.03);border-radius:8px;font-size:16px;color:rgba(1,41,92,0.62);line-height:1.65;">
+        <strong style="color:var(--kkr-navy);">Key context:</strong> Oil accounts for just 1.5% of total S&amp;P 500 operating expenses, implying a direct EPS headwind of roughly 1.4%. The indirect impact of weaker demand (−50bps to U.S. real GDP growth) reduces EPS by an additional 1.5%. Fair value seen at 21–22x NTM P/E, above the long-term sector- and quality-adjusted median of 19.7x, reflecting the higher quality of today's S&amp;P 500 index vs. 10–20 years ago.
+      </div>
+      <div class="chart-source">Source: Bloomberg, KKR Global Macro &amp; Asset Allocation analysis. Data as at March 27, 2026.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 7: PRIVATE CREDIT
+═══════════════════════════════════════ -->
+<div class="section" id="sec-credit">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">6</span>
+      <h2 class="sec-title">Private Credit</h2>
+    </div>
+    <p class="sec-sub">Exhibit 7 — This Private Credit cycle will likely be more defined by recovery rates than defaults; stress rate steady at 5–6% for two years and trending up</p>
+
+    <div class="chart-grid-2" id="credit-charts">
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 7 — Fitch Broad Default Measure</div>
+        <div class="chart-card-title">LTM Default Rates — Includes PIK, amend-and-extend; elevated for 2 years</div>
+        <div class="chart-legend">
+          <span class="leg-item"><span class="leg-dot" style="background:#01295C;"></span>Private Credit</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#075AAA;"></span>US Loans</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#3A7EBB;"></span>US HY</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#EB2226;"></span>EU Loans</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#B01418;border:1.5px dashed #B01418;background:none;width:16px;height:3px;border-radius:1px;"></span>EU HY</span>
+        </div>
+        <div style="position:relative;height:300px;">
+          <canvas id="defaultChart" role="img" aria-label="Line chart of LTM default rates December 2023 to December 2025. Private Credit rises steadily from 3.8% to 5.6%. US Loans from 2.0% to 3.1%. US HY from 2.5% to 4.0%.">Private Credit default rate rises to 5.6% by December 2025, trending up for 2 years.</canvas>
+        </div>
+        <div class="chart-source">Source: Fitch. Direct Lending default rate = issuer-weighted uncured payment default, bankruptcies, distressed exchanges, PIK options, amend-to-extend. Data as at December 31, 2025.</div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-label">Recovery Rate Outlook</div>
+        <div class="chart-card-title">Recovery rates, not defaults, are the defining risk of this cycle</div>
+        <div style="padding:8px 0;">
+          <div style="margin-bottom:22px;">
+            <div style="font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(1,41,92,0.38);margin-bottom:10px;">Historical vs. Projected Recovery Rates</div>
+            <div class="bar-row"><span class="bar-label">Prior cycles (avg.)</span><div class="bar-track"><div class="bar-fill" data-w="55" style="background:#1A7A4A;"></div></div><span class="bar-val" style="color:#1A7A4A;">50–60%</span></div>
+            <div class="bar-row"><span class="bar-label">This cycle (KKR est.)</span><div class="bar-track"><div class="bar-fill" data-w="40" style="background:#3A7EBB;"></div></div><span class="bar-val" style="color:#3A7EBB;">&lt;50%</span></div>
+            <div class="bar-row"><span class="bar-label">Smaller co. / loose terms</span><div class="bar-track"><div class="bar-fill" data-w="35" style="background:#EB2226;"></div></div><span class="bar-val" style="color:#B01418;">30–40%</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+            <div style="background:var(--kkr-blue-tint);border-radius:8px;padding:14px;text-align:center;">
+              <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(1,41,92,0.4);margin-bottom:4px;">Stress Rate (Fitch)</div>
+              <div style="font-size:28px;font-family:var(--mono);font-weight:600;color:var(--kkr-navy);">5–6%</div>
+              <div style="font-size:13px;color:rgba(1,41,92,0.45);margin-top:3px;">Steady 2 years, now trending up</div>
+            </div>
+            <div style="background:#FEF0F0;border-radius:8px;padding:14px;text-align:center;">
+              <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(176,20,24,0.5);margin-bottom:4px;">Implied Default Rate HY</div>
+              <div style="font-size:28px;font-family:var(--mono);font-weight:600;color:var(--kkr-red);">2.4%</div>
+              <div style="font-size:13px;color:rgba(176,20,24,0.5);margin-top:3px;">vs. historical avg. 5.4% — too rosy</div>
+            </div>
+          </div>
+          <div style="padding:14px 16px;background:rgba(1,41,92,0.03);border-radius:8px;border-left:3px solid var(--kkr-blue);">
+            <div style="font-size:15px;font-weight:700;color:var(--kkr-navy);margin-bottom:5px;">KKR View</div>
+            <div style="font-size:15.5px;color:rgba(1,41,92,0.62);line-height:1.65;">Payment-in-Kind and amend-and-extend transactions suppress near-term default statistics but raise recovery risk if the business does not improve. Endgame winners will be those who originate well, construct portfolios thoughtfully, and actively manage outcomes — not those who chase yield.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 8: REGIME CHANGE
+═══════════════════════════════════════ -->
+<div class="section" id="sec-regime">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">7</span>
+      <h2 class="sec-title">Regime Change &amp; Portfolio Construction</h2>
+    </div>
+    <p class="sec-sub">Since 2020, four forces have been reshaping the macro backdrop. The Middle East conflict reinforces all four and continues to erode the effectiveness of traditional 60/40 portfolio construction</p>
+
+    <div class="pillars-grid" id="pillars">
+      <div class="pillar-card">
+        <div class="pillar-icon">📊</div>
+        <div class="pillar-title">Larger Fiscal Deficits</div>
+        <div class="pillar-body">U.S. deficit widens from 2.3% to 6.1% of GDP. Germany from −1.3% to 3.6%. UK from 3.8% to 4.7%. China from 4.9% to 8.1%. All 2019 to 2026e.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">⚡</div>
+        <div class="pillar-title">Heightened Geopolitical Uncertainty</div>
+        <div class="pillar-body">Iran conflict intersects with Taiwan semiconductor risk, ongoing trade friction, and a blurring of economics, rule of law, and national security via technology and data.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🌍</div>
+        <div class="pillar-title">Messy Energy Transition</div>
+        <div class="pillar-body">Supply shocks reinforce the need for energy security and diversified sources. CEOs demand more supply chain resiliency. "Security of Everything" capex thesis intensifies.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">📈</div>
+        <div class="pillar-title">Stickier, More Volatile Inflation</div>
+        <div class="pillar-body">Inflation remains structurally elevated 2026–27. Headline volatility driven by energy. Stock–bond correlation turns positive, undermining 60/40 as reliable shock absorber.</div>
+      </div>
+    </div>
+
+    <div class="chart-grid-2" style="margin-bottom:20px;" id="regime-charts">
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 9 — Fiscal Deficits</div>
+        <div class="chart-card-title">Fiscal Deficits as % of GDP — 2019 vs. 2026e (positive = deficit)</div>
+        <div style="position:relative;height:270px;">
+          <canvas id="deficitChart" role="img" aria-label="Grouped bar chart. 2019 vs 2026 estimates. China: 4.9% to 8.1%. Germany: -1.3% to 3.6%. UK: 3.8% to 4.7%. USA: 2.3% to 6.1%.">Fiscal deficits: all major economies widened sharply from 2019 to 2026 estimate.</canvas>
+        </div>
+        <div class="chart-source">Source: Ministry of Finance of China, Bloomberg, KKR GMAA. Data as at March 30, 2026.</div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-label">Exhibit 29 — Expected Return Range</div>
+        <div class="chart-card-title">Forward-Looking Expected Range of Outcomes, % — efficient frontier has narrowed to 7.4% spread</div>
+        <div style="position:relative;height:270px;">
+          <canvas id="returnChart" role="img" aria-label="Grouped bar chart comparing last 5 years versus next 5 years expected returns. Private Equity drops from ~16% to 11-12%. S&P 500 from ~14% to ~6%. Direct Lending from ~9% to 8%.">Return range spread narrowed from 9.1% to 7.4%; private markets retain edge over public assets.</canvas>
+        </div>
+        <div class="chart-source">Source: KKR Global Macro &amp; Asset Allocation analysis. Data as at November 27, 2025.</div>
+      </div>
+    </div>
+
+    <div class="pullquote">
+      <div class="pq-text">"In this Regime Change environment, stocks and bonds can be under pressure simultaneously, which can render the traditional 60/40 framework less effective in delivering diversification benefits, particularly during periods of macro and geopolitical uncertainty. The efficient frontier has flattened. The return differential between the best and worst performing assets in a portfolio is now 7.4% — down from 9.1% a few years ago."</div>
+      <div class="pq-attr">KKR Global Macro &amp; Asset Allocation — April 2026</div>
+    </div>
+
+    <div class="chart-card full visible">
+      <div class="chart-card-label">Portfolio Construction Implications</div>
+      <div class="chart-card-title">KKR's recommended positioning in a narrower-return, higher-volatility world</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:8px 0;">
+        <div style="padding:16px 18px;background:var(--kkr-blue-tint);border-radius:10px;">
+          <div style="font-size:15px;font-weight:700;color:var(--kkr-navy);margin-bottom:8px;">Private Equity</div>
+          <div style="font-size:15.5px;color:rgba(1,41,92,0.65);line-height:1.62;">Operational alpha with less reliance on leverage. Companies able to streamline footprints and sell non-core assets will outperform in an environment of uneven growth.</div>
+        </div>
+        <div style="padding:16px 18px;background:var(--kkr-blue-tint);border-radius:10px;">
+          <div style="font-size:15px;font-weight:700;color:var(--kkr-navy);margin-bottom:8px;">Private Credit</div>
+          <div style="font-size:15.5px;color:rgba(1,41,92,0.65);line-height:1.62;">Upfront yield and stronger structures. Focus on origination quality and active portfolio management. Recovery rate outcomes will differentiate manager performance this cycle.</div>
+        </div>
+        <div style="padding:16px 18px;background:var(--kkr-blue-tint);border-radius:10px;">
+          <div style="font-size:15px;font-weight:700;color:var(--kkr-navy);margin-bottom:8px;">Infrastructure &amp; Asset-Based Finance</div>
+          <div style="font-size:15.5px;color:rgba(1,41,92,0.65);line-height:1.62;">Inflation-linked cash flows with contractual frameworks that dampen macro noise. Security of Everything and energy security spending drive ongoing capex across power, logistics, and defense.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SECTION 9: DISCLAIMER
+═══════════════════════════════════════ -->
+<div class="section" id="sec-disclaimer">
+  <div class="section-inner">
+
+    <div class="sec-heading">
+      <span class="sec-number">—</span>
+      <h2 class="sec-title">Important Information</h2>
+    </div>
+    <p class="sec-sub">KKR Flash Macro Update — U.S. Markets — April 2026 · Data as at March 27–30, 2026</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+
+      <div class="chart-card visible" style="grid-column:1/-1;border-top:3px solid var(--kkr-red);">
+        <div class="chart-card-label">Past Performance</div>
+        <div class="chart-card-title" style="color:var(--kkr-red);">Past performance is no guarantee of future results.</div>
+        <p style="font-size:15px;color:rgba(1,41,92,0.70);line-height:1.75;">References to "we", "us," and "our" refer to Mr. McVey and/or KKR's Global Macro and Asset Allocation team, as context requires, and not of KKR. The views expressed reflect the current views of Mr. McVey as of the date hereof and neither Mr. McVey nor KKR undertakes to advise you of any changes in the views expressed herein. Opinions or statements regarding financial market trends are based on current market conditions and are subject to change without notice.</p>
+      </div>
+
+      <div class="chart-card visible">
+        <div class="chart-card-label">Nature of This Document</div>
+        <div class="chart-card-title">Not Research · Not Investment Advice</div>
+        <p style="font-size:15px;color:rgba(1,41,92,0.70);line-height:1.75;">The views expressed in this publication are the personal views of Henry H. McVey of Kohlberg Kravis Roberts &amp; Co. L.P. (together with its affiliates, "KKR") and do not necessarily reflect the views of KKR itself or any investment professional at KKR. This document is not research and should not be treated as research. This document does not represent valuation judgments with respect to any financial instrument, issuer, security or sector that may be described or referenced herein and does not represent a formal or official view of KKR.</p>
+      </div>
+
+      <div class="chart-card visible">
+        <div class="chart-card-label">Use of This Document</div>
+        <div class="chart-card-title">Informational Purposes Only</div>
+        <p style="font-size:15px;color:rgba(1,41,92,0.70);line-height:1.75;">This document is not intended to, and does not, relate specifically to any investment strategy or product that KKR offers. It is being provided merely to provide a framework to assist in the implementation of an investor's own analysis and an investor's own views on the topic discussed herein. This publication has been prepared solely for informational purposes. The information contained herein is only as current as of the date indicated, and may be superseded by subsequent market events or for other reasons. Charts and graphs provided herein are for illustrative purposes only.</p>
+      </div>
+
+      <div class="chart-card visible">
+        <div class="chart-card-label">Forward-Looking Statements</div>
+        <div class="chart-card-title">No Assurance on Targets or Forecasts</div>
+        <p style="font-size:15px;color:rgba(1,41,92,0.70);line-height:1.75;">The information in this publication may contain projections or other forward-looking statements regarding future events, targets, forecasts or expectations regarding the strategies described herein, and is only current as of the date indicated. There is no assurance that such events or targets will be achieved, and may be significantly different from that shown here. The information in this document, including statements concerning financial market trends, is based on current market conditions, which will fluctuate and may be superseded by subsequent market events or for other reasons.</p>
+      </div>
+
+      <div class="chart-card visible">
+        <div class="chart-card-label">Data &amp; Sources</div>
+        <div class="chart-card-title">Accuracy Not Guaranteed</div>
+        <p style="font-size:15px;color:rgba(1,41,92,0.70);line-height:1.75;">The information in this document has been developed internally and/or obtained from sources believed to be reliable; however, neither KKR nor Mr. McVey guarantees the accuracy, adequacy or completeness of such information. Nothing contained herein constitutes investment, legal, tax or other advice nor is it to be relied on in making an investment or other decision. Performance of all cited indices is calculated on a total return basis with dividends reinvested. The indices do not include any expenses, fees or charges and are unmanaged and should not be considered investments.</p>
+      </div>
+
+      <div class="chart-card visible">
+        <div class="chart-card-label">Investment Suitability</div>
+        <div class="chart-card-title">May Not Be Suitable for All Investors</div>
+        <p style="font-size:15px;color:rgba(1,41,92,0.70);line-height:1.75;">The investment strategy and themes discussed herein may be unsuitable for investors depending on their specific investment objectives and financial situation. Please note that changes in the rate of exchange of a currency may affect the value, price or income of an investment adversely. References to a target portfolio and allocations of such a portfolio refer to a hypothetical allocation of assets and not an actual portfolio. There can be no assurance that an investment strategy will be successful. Historic market trends are not reliable indicators of actual future market behavior or future performance of any particular investment which may differ materially, and should not be relied upon as such.</p>
+      </div>
+
+      <div class="chart-card visible">
+        <div class="chart-card-label">No Duty to Update</div>
+        <div class="chart-card-title">Statements Subject to Change Without Notice</div>
+        <p style="font-size:15px;color:rgba(1,41,92,0.70);line-height:1.75;">Neither KKR nor Mr. McVey assumes any duty to, nor undertakes to update forward-looking statements. No representation or warranty, express or implied, is made or given by or on behalf of KKR, Mr. McVey or any other person as to the accuracy and completeness or fairness of the information contained in this publication and no responsibility or liability is accepted for any such information. By accessing this document, the recipient acknowledges their understanding and acceptance of the foregoing statement.</p>
+      </div>
+
+      <div class="chart-card visible">
+        <div class="chart-card-label">Index Definitions</div>
+        <div class="chart-card-title">Indices Are Unmanaged</div>
+        <p style="font-size:15px;color:rgba(1,41,92,0.70);line-height:1.75;">Indexes are unmanaged. It is not possible to invest directly in an index. S&amp;P 500 is a market-capitalization-weighted index of the 500 largest U.S. publicly traded companies. It should not be assumed that Mr. McVey has made or will make investment recommendations in the future that are consistent with the views expressed herein, or use any or all of the techniques or methods of analysis described herein in managing client or proprietary accounts. Further, Mr. McVey may make investment recommendations and KKR and its affiliates may have positions (long or short) or engage in securities transactions that are not consistent with the information and views expressed in this document.</p>
+      </div>
+
+    </div>
+
+    <div class="pullquote">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6DA3CE;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+        <span style="display:inline-block;width:16px;height:2px;background:var(--kkr-red);border-radius:1px;flex-shrink:0;"></span>
+        Legal Notice
+      </div>
+      <div class="pq-text">This publication should not be viewed as a current or past recommendation or a solicitation of an offer to buy or sell any securities or to adopt any investment strategy. This publication has been prepared solely for informational purposes and does not constitute an offer to sell, or a solicitation of an offer to purchase, any security, investment product or service.</div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(185,207,237,0.15);">
+        <div class="pq-attr">© 2026 Kohlberg Kravis Roberts &amp; Co. L.P.</div>
+        <div style="font-size:13px;color:rgba(185,207,237,0.5);font-weight:300;margin-top:4px;">30 Hudson Yards · New York, New York 10001 · +1 (212) 750.8300 · www.kkr.com</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═════════════════════════════
+     FOOTER
+═════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div style="font-size:16px;font-weight:700;letter-spacing:0.12em;color:rgba(185,207,237,0.5);text-transform:uppercase;margin-bottom:10px;">KKR · Flash Macro Update · U.S. Markets · April 2026</div>
+    <p><strong>Important Information:</strong> Past performance is no guarantee of future results. References to "we" and "our" refer to Mr. McVey and/or KKR's Global Macro and Asset Allocation team. The views expressed reflect current views as of the date hereof. This document is not research and should not be treated as research. Nothing contained herein constitutes investment, legal, tax or other advice. This publication has been prepared solely for informational purposes. Charts and graphs are for illustrative purposes only. Data sourced from Bloomberg, Haver Analytics, KKR Global Macro &amp; Asset Allocation analysis, Fitch, Kpler, EIA, and other sources as noted. Data as at March 27–30, 2026 unless otherwise stated.</p>
+    <p style="margin-top:8px;"><strong>© 2026 Kohlberg Kravis Roberts &amp; Co. L.P.</strong> &nbsp;·&nbsp; 30 Hudson Yards, New York, New York 10001 &nbsp;·&nbsp; +1 (212) 750.8300 &nbsp;·&nbsp; www.kkr.com</p>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════════════════
+// SECTION NAVIGATION
+// ══════════════════════════════════
+const chartRegistry = {};
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  setTimeout(() => { animateSection(id); initSectionCharts(id); }, 80);
+}
+
+function animateSection(id) {
+  const sec = document.getElementById('sec-' + id);
+  if (!sec) return;
+  sec.querySelectorAll('.exec-card, .kpi-card, .chart-card, .pillar-card').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), i * 70);
+  });
+  sec.querySelectorAll('.bar-fill').forEach(el => {
+    const w = el.dataset.w;
+    if (w) setTimeout(() => { el.style.width = w + '%'; }, 400);
+  });
+}
+
+// ══════════════════════════════════
+// CHART INITIALIZATION PER SECTION
+// ══════════════════════════════════
+const BASE_OPTS = (extra = {}) => ({
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: { duration: 900, easing: 'easeOutQuart' },
+  plugins: {
+    legend: { display: false },
+    tooltip: { mode: 'index', intersect: false,
+      backgroundColor: '#01295C', titleColor: '#B9CFED', bodyColor: '#fff',
+      padding: 10, cornerRadius: 6, titleFont: { size: 11 }, bodyFont: { size: 11 }
+    }
+  },
+  ...extra
+});
+
+const SCALE_OPTS = (yLabel, xExtra = {}, yExtra = {}) => ({
+  x: { ticks: { font: { size: 10, family: "'Nunito'" }, color: 'rgba(1,41,92,0.45)', maxRotation: 45, ...xExtra.ticks }, grid: { display: false }, ...xExtra },
+  y: { ticks: { font: { size: 10, family: "'Nunito'" }, color: 'rgba(1,41,92,0.45)', callback: v => yLabel ? v + yLabel : v }, grid: { color: 'rgba(1,41,92,0.055)', drawBorder: false }, ...yExtra }
+});
+
+function safeChart(id, config) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  if (chartRegistry[id]) { chartRegistry[id].destroy(); }
+  chartRegistry[id] = new Chart(canvas, config);
+}
+
+function initSectionCharts(id) {
+  switch(id) {
+    case 'market':     initMarketCharts(); break;
+    case 'forecasts':  initForecastCharts(); break;
+    case 'oil':        initOilCharts(); break;
+    case 'inflation':  initInflationCharts(); break;
+    case 'equity':     initEquityCharts(); break;
+    case 'credit':     initCreditCharts(); break;
+    case 'regime':     initRegimeCharts(); break;
+  }
+}
+
+// ── MARKET ──
+function initMarketCharts() {
+  const eLabels = ['Asia\nDiesel','Asia\nJet Fuel','EZ\nJet Fuel','US\nJet Fuel','Asia\nGas','EZ\nDiesel','EZ\nGas','US\nDiesel','Asia\nGasoline','US\nGasoline','EZ\nGasoline','US\nNat Gas'];
+  const eData   = [141,134,106,98,90,82,70,68,66,56,52,6];
+  safeChart('energyChart', {
+    type: 'bar',
+    data: { labels: eLabels, datasets: [{ data: eData, borderRadius: 4, borderSkipped: false,
+      backgroundColor: eData.map(v => v >= 100 ? '#EB2226' : v >= 60 ? '#B9CFED' : '#075AAA') }] },
+    options: { ...BASE_OPTS(), scales: SCALE_OPTS('%'), plugins: { ...BASE_OPTS().plugins,
+      datalabels: { display: false } } }
+  });
+
+  const hLabels = ['Fertiliser','Methanol','Crude','Minerals','Nat Gas Liq','LNG','Clean Petro Prods','Dirty Petro Prods','Petcoke','Softs','Grains/Oilseeds'];
+  safeChart('hormuzChart', {
+    type: 'bar',
+    data: { labels: hLabels, datasets: [
+      { label: 'ME Gulf Exports', data: [32,27,24,18,16,14,10,9,8,5,4], backgroundColor: '#075AAA', borderRadius: 3, borderSkipped: false },
+      { label: 'ME Gulf Imports', data: [4,2,1,7,1,1,3,4,2,3,2], backgroundColor: '#B9CFED', borderRadius: 3, borderSkipped: false }
+    ]},
+    options: { ...BASE_OPTS(), indexAxis: 'y',
+      scales: { x: { ticks: { callback: v=>v+'%', font: {size:12}, color:'rgba(1,41,92,0.45)' }, grid:{color:'rgba(1,41,92,0.055)'}, stacked:true },
+                y: { ticks: { font: {size:11}, color:'rgba(1,41,92,0.45)' }, grid:{display:false}, stacked:true } },
+      plugins: { ...BASE_OPTS().plugins, legend: { display: true, position: 'bottom',
+        labels: { font: {size:12}, color:'rgba(1,41,92,0.6)', padding:12, boxWidth:10, boxHeight:8 } } }
+    }
+  });
+
+  // ── Radar Chart — Exhibit 1 ──
+  // Ukraine Invasion = 100% baseline on every axis
+  // Iran current as % of Ukraine peak: CPI 67, WTI 74, LNG 24, LL 27, S&P 35
+  // Liberation Day as % of Ukraine peak: CPI 69, WTI 69, LNG 23, LL 46, S&P 106
+  safeChart('radarChart', {
+    type: 'radar',
+    data: {
+      labels: ['CPI Breakeven', 'WTI Crude', 'LNG Price', 'Lev. Loan Spreads', 'S&P Drawdown'],
+      datasets: [
+        {
+          label: 'Ukraine Invasion (100% baseline)',
+          data: [100, 100, 100, 100, 100],
+          borderColor: '#B9CFED',
+          backgroundColor: 'rgba(185,207,237,0.06)',
+          borderWidth: 2,
+          borderDash: [5, 3],
+          pointBackgroundColor: '#3A7EBB',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+        {
+          label: 'Liberation Day',
+          data: [69, 69, 23, 46, 106],
+          borderColor: '#075AAA',
+          backgroundColor: 'rgba(7,90,170,0.08)',
+          borderWidth: 2,
+          borderDash: [3, 3],
+          pointBackgroundColor: '#075AAA',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+        {
+          label: 'Iran Current',
+          data: [67, 74, 24, 27, 35],
+          borderColor: '#EB2226',
+          backgroundColor: 'rgba(235,34,38,0.07)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#EB2226',
+          pointRadius: 6,
+          pointHoverRadius: 8,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 900, easing: 'easeOutQuart' },
+      scales: {
+        r: {
+          min: 0,
+          max: 120,
+          ticks: {
+            stepSize: 30,
+            font: { size: 11, family: "'Nunito'" },
+            color: 'rgba(1,41,92,0.4)',
+            backdropColor: 'transparent',
+            callback: v => v + '%'
+          },
+          grid: { color: 'rgba(1,41,92,0.09)' },
+          angleLines: { color: 'rgba(1,41,92,0.12)' },
+          pointLabels: {
+            font: { size: 13, family: "'Nunito'", weight: '600' },
+            color: 'rgba(1,41,92,0.72)'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            font: { size: 12 },
+            color: 'rgba(1,41,92,0.6)',
+            padding: 18,
+            boxWidth: 10,
+            boxHeight: 10
+          }
+        },
+        tooltip: {
+          backgroundColor: '#01295C',
+          titleColor: '#B9CFED',
+          bodyColor: '#fff',
+          padding: 10,
+          cornerRadius: 6,
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.raw}% of Ukraine peak`
+          }
+        }
+      }
+    }
+  });}
+
+// ── FORECASTS ──
+function initForecastCharts() {
+  safeChart('vsConsensusChart', {
+    type: 'bar',
+    data: { labels: ['WTI ($/bbl)','Real GDP (pp)','Headline CPI (pp)','10yr UST (pp)'],
+      datasets: [{ label: 'KKR vs. Consensus', data: [11, -0.3, 0.8, 0.25],
+        backgroundColor: (ctx) => ctx.raw >= 0 ? '#EB2226' : '#1A7A4A', borderRadius: 5, borderSkipped: false }] },
+    options: { ...BASE_OPTS(), scales: SCALE_OPTS(''),
+      plugins: { ...BASE_OPTS().plugins, tooltip: { ...BASE_OPTS().plugins.tooltip } } }
+  });
+
+  const nfpYears = ['2006','2008','2010','2012','2014','2016','2018','2020','2022','2024','2026e','2028e'];
+  const nfpData  = [190,180,130,120,130,160,150,100,165,100,50,50];
+  safeChart('nfpChart', {
+    type: 'line',
+    data: { labels: nfpYears, datasets: [{ label: 'Monthly NFP (thou.)', data: nfpData,
+      borderColor: '#075AAA', borderWidth: 2.5, pointRadius: 3, tension: 0.4,
+      fill: true, backgroundColor: 'rgba(7,90,170,0.07)' }] },
+    options: { ...BASE_OPTS(), scales: SCALE_OPTS('k') }
+  });
+
+  // ── Scenario Fan Charts — Option A ──
+  // Each chart has 4 named datasets: High, Base, Low, and the fill band
+  // Custom tooltip surfaces all three scenario values on hover
+  const fcYears = ['2024a', '2025a', '2026e', '2027e'];
+
+  // probabilities labels for tooltip
+  const scenLabels = { high:'High 25%', base:'Base 60%', low:'Low 15%' };
+
+  const makeFanOpts = (yMin, yMax, yFmt, highData, baseData, lowData) => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 700, easing: 'easeOutQuart' },
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      x: { ticks: { font:{size:11}, color:'rgba(1,41,92,0.5)' }, grid: { display:false } },
+      y: { min:yMin, max:yMax, ticks: { callback:yFmt, font:{size:10}, color:'rgba(1,41,92,0.4)' }, grid: { color:'rgba(1,41,92,0.07)' } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#01295C',
+        titleColor: '#B9CFED',
+        titleFont: { size:12, weight:'700' },
+        bodyColor: '#fff',
+        bodyFont: { size:12 },
+        padding: 12,
+        cornerRadius: 6,
+        callbacks: {
+          title: (items) => fcYears[items[0].dataIndex],
+          beforeBody: () => '',
+          label: (ctx) => {
+            // Only show for the three named scenario lines, skip the fill dataset
+            const dsLabel = ctx.dataset.label;
+            if (!dsLabel || dsLabel === '_fill') return null;
+            const val = ctx.parsed.y;
+            const formatted = typeof yFmt === 'function' ? yFmt(val) : val;
+            const prefix = dsLabel === 'Base 60%' ? '● ' : dsLabel === 'High 25%' ? '▲ ' : '▼ ';
+            return `${prefix}${dsLabel}: ${formatted}`;
+          },
+          afterBody: () => ''
+        }
+      }
+    }
+  });
+
+  const makeFan = (highD, baseD, lowD, baseColor, yMin, yMax, yFmt) => ({
+    type: 'line',
+    data: {
+      labels: fcYears,
+      datasets: [
+        // Fill band: high fills down to low
+        { label:'_fill', data:highD, fill:'+1', backgroundColor:'rgba(7,90,170,0.10)',
+          borderColor:'transparent', pointRadius:0, tension:0.35, order:4 },
+        { label:'_fill', data:lowD,  fill:false,
+          borderColor:'transparent', pointRadius:0, tension:0.35, order:3 },
+        // High scenario — dashed red, visible dots, named for tooltip
+        { label:'High 25%', data:highD, fill:false,
+          borderColor:'#EB2226', borderWidth:1.5, borderDash:[5,3],
+          pointRadius:3, pointBackgroundColor:'#EB2226', pointHoverRadius:6,
+          tension:0.35, order:2 },
+        // Low scenario — dashed green, visible dots, named for tooltip
+        { label:'Low 15%', data:lowD, fill:false,
+          borderColor:'#1A7A4A', borderWidth:1.5, borderDash:[5,3],
+          pointRadius:3, pointBackgroundColor:'#1A7A4A', pointHoverRadius:6,
+          tension:0.35, order:1 },
+        // Base — solid, prominent, on top
+        { label:'Base 60%', data:baseD, fill:false,
+          borderColor:baseColor, borderWidth:2.5,
+          pointRadius:5, pointBackgroundColor:baseColor, pointHoverRadius:8,
+          tension:0.35, order:0 },
+      ]
+    },
+    options: makeFanOpts(yMin, yMax, yFmt, highD, baseD, lowD)
+  });
+
+  safeChart('fanWTI', makeFan(
+    [76, 65, 130, 100],   // high
+    [76, 65,  95,  83],   // base
+    [76, 65,  77,  70],   // low
+    '#075AAA', 40, 150, v => '$' + v
+  ));
+  safeChart('fanGDP', makeFan(
+    [2.8, 2.1, 2.5, 2.2],
+    [2.8, 2.1, 2.0, 1.6],
+    [2.8, 2.1, 0.5, 0.5],
+    '#075AAA', -0.5, 4, v => v + '%'
+  ));
+  safeChart('fanCPI', makeFan(
+    [3.0, 2.7, 4.8, 2.6],
+    [3.0, 2.7, 3.8, 2.5],
+    [3.0, 2.7, 3.3, 2.2],
+    '#075AAA', 1.5, 5.5, v => v + '%'
+  ));
+  safeChart('fanFed', makeFan(
+    [4.38, 3.63, 4.13, 3.88],
+    [4.38, 3.63, 3.38, 3.13],
+    [4.38, 3.63, 2.13, 1.13],
+    '#075AAA', 0.5, 5, v => v + '%'
+  ));
+}
+
+// ── OIL ──
+function initOilCharts() {
+  const oLabels = ['2019','2020','2021','2022','2023','2024','2025','2026e','2027e','2028e'];
+  safeChart('oilChart', {
+    type: 'line',
+    data: { labels: oLabels, datasets: [
+      { label:'Historical', data:[57,41,68,95,77,65,68,null,null,null],
+        borderColor:'#01295C', borderWidth:2.5, pointRadius:3, tension:0.35, spanGaps:true },
+      { label:'Base 60%', data:[null,null,null,null,null,null,68,95,83,79],
+        borderColor:'#075AAA', borderWidth:2.5, borderDash:[0], pointRadius:4, tension:0.3, spanGaps:true },
+      { label:'High 25%', data:[null,null,null,null,null,null,68,130,100,88],
+        borderColor:'#EB2226', borderWidth:2, borderDash:[7,4], pointRadius:4, tension:0.3, spanGaps:true },
+      { label:'Low 15%', data:[null,null,null,null,null,null,68,77,70,72],
+        borderColor:'#1A7A4A', borderWidth:2, borderDash:[4,4], pointRadius:4, tension:0.3, spanGaps:true },
+      { label:'Futures', data:[null,null,null,null,null,null,68,82,78,75],
+        borderColor:'#B9CFED', borderWidth:1.5, borderDash:[2,3], pointRadius:3, tension:0.3, spanGaps:true }
+    ]},
+    options: { ...BASE_OPTS(),
+      scales: { x: { ticks:{font: {size:13},color:'rgba(1,41,92,0.45)'}, grid:{display:false} },
+                y: { ticks:{callback:v=>'$'+v,font: {size:13},color:'rgba(1,41,92,0.45)'}, grid:{color:'rgba(1,41,92,0.055)'}, min:20, max:200 } },
+      plugins: { ...BASE_OPTS().plugins,
+        annotation: { annotations: [{
+          type: 'line', xMin: '2025', xMax: '2025',
+          borderColor: 'rgba(1,41,92,0.15)', borderWidth: 1, borderDash: [4,4]
+        }]}
+      }
+    }
+  });
+}
+
+// ── INFLATION ──
+function initInflationCharts() {
+  const qLabels = ['1Q26e','2Q26e','3Q26e','4Q26e','1Q27e','2Q27e','3Q27e','4Q27e'];
+  safeChart('cpiChart', {
+    type: 'line',
+    data: { labels: qLabels, datasets: [
+      { label:'Headline CPI', data:[2.6,4.6,4.2,3.9,3.8,2.0,2.1,2.2],
+        borderColor:'#075AAA', borderWidth:2.5, pointRadius:4, tension:0.3 },
+      { label:'Core CPI (80%)', data:[2.6,2.8,2.8,3.1,3.0,2.7,2.5,2.2],
+        borderColor:'#3A7EBB', borderWidth:2, borderDash:[6,3], pointRadius:3, tension:0.3 },
+      { label:'Energy (7%)', data:[3.0,29.9,25.1,15.5,16.0,-5.8,-2.0,2.5],
+        borderColor:'#EB2226', borderWidth:1.5, borderDash:[3,3], pointRadius:3, tension:0.3 }
+    ]},
+    options: { ...BASE_OPTS(), scales: SCALE_OPTS('%') }
+  });
+
+  safeChart('incomeChart', {
+    type: 'bar',
+    data: { labels: ['Lowest 20%','2nd 20%','Middle 20%','4th 20%','Highest 20%'],
+      datasets: [{ label:'Energy spend % of income', data:[17.4,9.8,6.8,5.0,2.7],
+        backgroundColor:['#EB2226','#3A7EBB','#075AAA','#B9CFED','#E8F0F9'],
+        borderRadius:6, borderSkipped:false }] },
+    options: { ...BASE_OPTS(), scales: { ...SCALE_OPTS('%'), y: { ...SCALE_OPTS('%').y, max:20 } } }
+  });
+}
+
+// ── EQUITY ──
+function initEquityCharts() {
+  safeChart('epsChart', {
+    type: 'bar',
+    data: {
+      labels: ['GMAA\nStart Year','Oil OpEx\nHit','50bp GDP\nDowngrade','New GMAA\nEPS Growth','Bottom-Up\nConsensus','Top-Down\nConsensus'],
+      datasets: [{ label:'EPS Growth %', data:[11,-1.4,-1.5,8,17,11],
+        backgroundColor:['#075AAA','#EB2226','#EB2226','#1A7A4A','rgba(1,41,92,0.14)','rgba(1,41,92,0.1)'],
+        borderRadius:5, borderSkipped:false }]
+    },
+    options: { ...BASE_OPTS(), scales: { ...SCALE_OPTS('%'), y: { ...SCALE_OPTS('%').y, min:-3, max:20 } } }
+  });
+
+  safeChart('impliedEpsChart', {
+    type: 'bar',
+    data: { labels: ['Tech Bubble\nPeak','Start of\n2026','Today\n(Mar-26)','2010–19\nAverage'],
+      datasets: [{ label:'Market-Implied EPS Growth', data:[22,15,13,7],
+        backgroundColor:['rgba(1,41,92,0.18)','rgba(1,41,92,0.28)','#075AAA','rgba(1,41,92,0.12)'],
+        borderRadius:6, borderSkipped:false }] },
+    options: { ...BASE_OPTS(), scales: SCALE_OPTS('%') }
+  });
+}
+
+// ── CREDIT ──
+function initCreditCharts() {
+  const defMonths = ['Dec-23','Feb-24','Apr-24','Jun-24','Aug-24','Oct-24','Dec-24','Feb-25','Apr-25','Jun-25','Aug-25','Oct-25','Dec-25'];
+  safeChart('defaultChart', {
+    type: 'line',
+    data: { labels: defMonths, datasets: [
+      { label:'Private Credit', data:[3.8,3.9,4.1,4.2,4.4,4.6,4.7,4.9,5.1,5.2,5.4,5.5,5.6],
+        borderColor:'#01295C', borderWidth:3, pointRadius:4, pointBackgroundColor:'#01295C', tension:0.4 },
+      { label:'US Loans', data:[1.9,2.0,2.2,2.3,2.5,2.7,2.8,2.9,3.0,3.1,3.1,3.1,3.1],
+        borderColor:'#075AAA', borderWidth:2, pointRadius:3, pointBackgroundColor:'#075AAA', tension:0.4 },
+      { label:'US HY', data:[2.4,2.6,2.8,2.9,3.1,3.3,3.5,3.6,3.7,3.8,3.9,3.9,4.0],
+        borderColor:'#3A7EBB', borderWidth:2, borderDash:[5,3], pointRadius:3, pointBackgroundColor:'#3A7EBB', tension:0.4 },
+      { label:'EU Loans', data:[1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4,2.5,2.5,2.6,2.7,2.8],
+        borderColor:'#EB2226', borderWidth:2, pointRadius:3, pointBackgroundColor:'#EB2226', tension:0.4 },
+      { label:'EU HY', data:[2.0,2.1,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.0,3.1,3.1,3.2],
+        borderColor:'#B01418', borderWidth:2, borderDash:[5,3], pointRadius:3, pointBackgroundColor:'#B01418', tension:0.4 }
+    ]},
+    options: { ...BASE_OPTS(), scales: { ...SCALE_OPTS('%'), y: { ...SCALE_OPTS('%').y, min:0, max:7 } } }
+  });
+}
+
+// ── REGIME ──
+function initRegimeCharts() {
+  safeChart('deficitChart', {
+    type: 'bar',
+    data: { labels: ['China','Germany','UK','USA'],
+      datasets: [
+        { label:'2019', data:[4.9,-1.3,3.8,2.3], backgroundColor:'rgba(1,41,92,0.18)', borderRadius:4, borderSkipped:false },
+        { label:'2026e', data:[8.1,3.6,4.7,6.1], backgroundColor:'#075AAA', borderRadius:4, borderSkipped:false }
+      ]},
+    options: { ...BASE_OPTS(), scales: SCALE_OPTS('%'),
+      plugins: { ...BASE_OPTS().plugins, legend:{ display:true, position:'bottom', labels:{ font: {size:13}, color:'rgba(1,41,92,0.6)', padding:14, boxWidth:10, boxHeight:8 } } }
+    }
+  });
+
+  safeChart('returnChart', {
+    type: 'bar',
+    data: { labels: ['Priv. Equity','Priv. Infra','Direct\nLending','Priv. Real\nEstate','S&P 500','10yr UST','Cash\n(USD)'],
+      datasets: [
+        { label:'Last 5 Years', data:[16,11,9,6,14,-1,3], backgroundColor:'rgba(1,41,92,0.15)', borderRadius:4, borderSkipped:false },
+        { label:'Next 5 Years (est.)', data:[12,10,8,9,6,5,4], backgroundColor:'#075AAA', borderRadius:4, borderSkipped:false }
+      ]},
+    options: { ...BASE_OPTS(), scales: SCALE_OPTS('%'),
+      plugins: { ...BASE_OPTS().plugins, legend:{ display:true, position:'bottom', labels:{ font: {size:13}, color:'rgba(1,41,92,0.6)', padding:14, boxWidth:10, boxHeight:8 } } }
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Animate exec summary on load
+  setTimeout(() => animateSection('exec'), 150);
+
+  // Nav caret visibility — hide at scroll edges
+  const navInner   = document.querySelector('.nav-inner');
+  const caretLeft  = document.getElementById('navCaretLeft');
+  const caretRight = document.getElementById('navCaretRight');
+  function updateCarets() {
+    if (!navInner || !caretLeft || !caretRight) return;
+    const atStart = navInner.scrollLeft <= 2;
+    const atEnd   = navInner.scrollLeft >= navInner.scrollWidth - navInner.clientWidth - 2;
+    caretLeft.classList.toggle('hidden', atStart);
+    caretRight.classList.toggle('hidden', atEnd);
+  }
+  if (navInner) {
+    navInner.addEventListener('scroll', updateCarets, { passive: true });
+    window.addEventListener('resize', updateCarets, { passive: true });
+    updateCarets();
+  }
+});
+// ══════════════════════════════════
+// STICKY NAV ON SCROLL
+// ══════════════════════════════════
+(function() {
+  const nav = document.querySelector('.nav-bar');
+  const spacer = document.querySelector('.nav-bar-spacer');
+  const header = document.querySelector('.header');
+  function updateNav() {
+    const headerBottom = header.getBoundingClientRect().bottom;
+    const shouldStick = headerBottom <= 0;
+    if (shouldStick && !nav.classList.contains('is-sticky')) {
+      nav.classList.add('is-sticky');
+      spacer.style.height = nav.offsetHeight + 'px';
+    } else if (!shouldStick && nav.classList.contains('is-sticky')) {
+      nav.classList.remove('is-sticky');
+      spacer.style.height = '0';
+    }
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  window.addEventListener('resize', updateNav, { passive: true });
+})();
+
+</script>
+</body>
+</html>
